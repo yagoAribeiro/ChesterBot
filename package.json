@@ -1,0 +1,17 @@
+{
+  "name": "chester_ddbot",
+  "version": "1.0.0",
+  "main": "app.mjs",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "agyron",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^9.17.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "discord.js": "^14.17.2"
+  }
+}
