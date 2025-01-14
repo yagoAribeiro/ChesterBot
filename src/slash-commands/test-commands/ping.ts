@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { CustomCommand } from '../../backend/models/custom_command';
+import { CustomCommand } from '../../backend/models/custom-command';
 
 export = new CustomCommand(new SlashCommandBuilder()
 .setName('ping')

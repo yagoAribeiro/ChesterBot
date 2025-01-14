@@ -4,6 +4,7 @@ import { resolve, join } from 'node:path';
 import config from './config.json' with {type: "json"};
 
 const __dirname = resolve();
+const __dircommand = 'bin/slash-commands';
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages,
 	 GatewayIntentBits.MessageContent, GatewayIntentBits.GuildIntegrations] });
@@ -16,7 +17,7 @@ client.once(Events.ClientReady, readyClient => {
 const rest = new REST().setToken(config.token);
 
 //Command registering base;
-const command_loader = new SlashCommandLoader(join(__dirname, 'bin/slash_commands'));
+const command_loader = new SlashCommandLoader(join(__dirname, __dircommand));
 command_loader.setup(rest, config.clientID).then((value) => client.commands = value);
 
 //Command handling base;

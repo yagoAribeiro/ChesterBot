@@ -1,5 +1,5 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, CacheType, Collection, CollectorFilter, SlashCommandBuilder } from 'discord.js';
-import { CustomCommand } from '../../backend/models/custom_command';
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, CacheType, SlashCommandBuilder } from 'discord.js';
+import { CustomCommand } from '../../backend/models/custom-command';
 
 export = new CustomCommand(new SlashCommandBuilder()
 .setName('add_item')
@@ -32,7 +32,7 @@ async (interaction) => {
     const filter = (i: any) => i.user.id === interaction.user.id;
     const confirmation: ButtonInteraction<CacheType> = (await response.awaitMessageComponent({filter: filter, time: 60_000})) as ButtonInteraction;
     if (confirmation.customId === 'confirm'){
-        (await (await confirmation.update({content: `**${item_name} x${Number.isInteger(item_quantity) ? item_quantity.toFixed(0) : item_quantity.toFixed(2)}** has been ~~eated~~ added succesfully to your Chester!`, components: []})).fetch()).react('👅');
+        (await (await confirmation.update({content: `**${item_name} x${Number.isInteger(item_quantity) ? item_quantity.toFixed(0) : item_quantity.toFixed(2)}** has been ~~eaten~~ added succesfully to your Chester!`, components: []})).fetch()).react('👅');
     }else if (confirmation.customId === 'cancel'){
         await confirmation.deferUpdate();
         await confirmation.deleteReply();

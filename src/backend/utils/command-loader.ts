@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { CustomCommand } from '../models/custom_command';
+import { CustomCommand } from '../models/custom-command';
 import { RESTPostAPIApplicationCommandsJSONBody, REST, Routes, Collection } from 'discord.js';
 
 export class SlashCommandLoader{
