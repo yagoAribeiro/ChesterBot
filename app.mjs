@@ -1,5 +1,5 @@
 import { Client, REST, Events, GatewayIntentBits } from 'discord.js';
-import { SlashCommandLoader } from './bin/backend/utils/command_loader.js';
+import { SlashCommandLoader } from './bin/backend/utils/command-loader.js';
 import { resolve, join } from 'node:path';
 import config from './config.json' with {type: "json"};
 

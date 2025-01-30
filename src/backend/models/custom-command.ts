@@ -1,4 +1,7 @@
+import { tagged } from 'brandi';
 import { ChatInputCommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder } from 'discord.js';
+import { TAGS } from '../injection/tokens';
+
 export class CustomCommand{
     data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
@@ -10,3 +13,5 @@ export class CustomCommand{
         this.devOnly = devOnly ?? false;
     }
 }
+
+tagged(CustomCommand, TAGS.tests);

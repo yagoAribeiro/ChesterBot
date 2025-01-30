@@ -16,7 +16,7 @@ export class SlashCommandLoader{
             if (err == null){
                 for (let file of files){
                     let filePath = this.path.concat('\\', file.toString());
-                    if (filePath.indexOf('_commands') != -1 && filePath.endsWith('.js')){
+                    if (filePath.indexOf('-commands') != -1 && filePath.endsWith('.js')){
                         let command: any = require(filePath);
                         if (command instanceof CustomCommand){
                             commands.push(command.data.toJSON());
