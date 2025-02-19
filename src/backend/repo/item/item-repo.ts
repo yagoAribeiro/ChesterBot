@@ -1,9 +1,15 @@
 import { ItemAPI } from "../../api/item/item-api";
+import { injectable, ENV, SCOPE } from "../../injection/injector";
 import { Item } from "../../models/item";
 import { BaseRepo } from "../base-repo";
-import { IitemRepo } from "./i-item-repo";
+import { IitemRepo} from "./i-item-repo";
 
+@injectable([ENV.Live], SCOPE.Transient)
 export class ItemRepo extends BaseRepo<ItemAPI> implements IitemRepo{
+
+   constructor(api: ItemAPI){
+      super(api);
+   }
 
    getAll(guildID: string, depth?: number): Promise<Item[]> {
       throw new Error("Method not implemented.");

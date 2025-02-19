@@ -1,11 +1,17 @@
 import { ItemAPI } from "../../api/item/item-api";
+import { ENV, injectable, SCOPE } from "../../injection/injector";
 import { Item } from "../../models/item";
 import { BaseRepo } from "../base-repo";
 import { IitemRepo } from "./i-item-repo";
 
+@injectable([ENV.Tests], SCOPE.Singleton)
 export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo{
 
     private __items: Item[] = [];
+
+    constructor(api: ItemAPI){
+        super(api);
+     }
     
     getFromAutocomplete(guildID: string, query: string): Promise<Item[]> {
         if (query.length >= 3){

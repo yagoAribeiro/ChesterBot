@@ -1,6 +1,9 @@
 import { Client, REST, Events, GatewayIntentBits } from 'discord.js';
 import { SlashCommandLoader } from './bin/backend/utils/command-loader.js';
 import { resolve, join } from 'node:path';
+import {InjectionContainer} from './bin/backend/injection/injector.js';
+import {Entries} from './bin/backend/injection/container.js';
+import 'reflect-metadata';
 import config from './config.json' with {type: "json"};
 
 const __dirname = resolve();
@@ -15,6 +18,9 @@ client.once(Events.ClientReady, readyClient => {
 });
 
 const rest = new REST().setToken(config.token);
+
+//DI
+InjectionContainer.init(Entries);
 
 //Command registering base;
 const command_loader = new SlashCommandLoader(join(__dirname, __dircommand));

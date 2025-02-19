@@ -1,8 +1,8 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, CacheType, SlashCommandBuilder } from 'discord.js';
 import { CustomCommand } from '../../backend/models/custom-command';
-import { CONTAINER } from '../../backend/injection/container';
-import { TOKENS } from '../../backend/injection/tokens';
 import { Item } from '../../backend/models/item';
+import { InjectionContainer } from '../../backend/injection/injector';
+import { IitemRepo, ITEM_REPO_KEY } from '../../backend/repo/item/i-item-repo';
 
 export = new CustomCommand(new SlashCommandBuilder()
 .setName('create_item')
@@ -13,6 +13,7 @@ export = new CustomCommand(new SlashCommandBuilder()
 .addNumberOption(opt => opt.setName('value').setDescription('Item\'s value. It can be any number to match your RPG currency.').setRequired(false))
 .addBooleanOption(opt => opt.setName('equipable').setDescription('Set this item as an equipable item. For sorting purposes, and for allowing players to equip them.').setRequired(false)),
 async (interaction) => {
+    const item_repo = InjectionContainer.get<IitemRepo>(ITEM_REPO_KEY);
     let new_item: Item = new Item(interaction.guildId, interaction.options.getString('name'),  interaction.options.getBoolean('equipable'), new Date(), interaction.options.getString('description'), interaction.options.getNumber('weight'), interaction.options.getNumber('value'));
     const btn_confirm = new ButtonBuilder()
 			.setCustomId('confirm')
@@ -29,7 +30,7 @@ async (interaction) => {
     const filter = (i: any) => i.user.id === interaction.user.id;
     const confirmation: ButtonInteraction<CacheType> = (await response.awaitMessageComponent({filter: filter, time: 60_000})) as ButtonInteraction;
     if (confirmation.customId === 'confirm'){
-        await CONTAINER.get(TOKENS.itemRepo).addItem(new_item);
+        await item_repo.addItem(new_item);
         (await (await confirmation.update({content: `**${new_item.name}** was succesfully created.`, components: []})).fetch()).react('👅');
     }else if (confirmation.customId === 'cancel'){
         await confirmation.deferUpdate();

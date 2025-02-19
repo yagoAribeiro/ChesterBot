@@ -1,7 +1,6 @@
 import { Item } from "../../models/item";
 
-export interface IitemRepo{
-
+export interface IitemRepo {
     getAll(guildID: string, depth?: number) : Promise<Item[]>
     getFromAutocomplete(guildID: string, query: string, depth?: number) : Promise<Item[]>
     getItem(itemID: number) : Promise<Item | null>
@@ -10,3 +9,5 @@ export interface IitemRepo{
     updateItem(itemID: number, model: Item) : Promise<void>
     delete(itemID: number) : Promise<void>
 }
+
+export const ITEM_REPO_KEY: string = 'IitemRepo';
