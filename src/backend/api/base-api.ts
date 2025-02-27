@@ -1,4 +1,4 @@
-import { IDataModel } from "../models/i-data-model";
+import { DataModel } from "../models/i-data-model";
 import { Promise } from 'es6-promise';
 import { IBaseApi } from "./base-i-api";
 
@@ -12,10 +12,10 @@ export abstract class BaseApi implements IBaseApi{
     getTargetUri(): string {
         throw new Error("Method not implemented.");
     }
-    get<TModel extends IDataModel<TModel>>(uri: string, headers?: Map<string, string>): Promise<TModel> {
+    get<TModel extends DataModel<TModel>>(uri: string, headers?: Map<string, string>): Promise<TModel> {
         throw new Error("Method not implemented.");
     }
-    getAll<TModel extends IDataModel<TModel>>(uri: string, headers?: Map<string, string>): Promise<TModel[]> {
+    getAll<TModel extends DataModel<TModel>>(uri: string, headers?: Map<string, string>): Promise<TModel[]> {
         throw new Error("Method not implemented.");
     }
     post(uri: string, body: Map<string, string>, headers?: Map<string, string>): Promise<void> {

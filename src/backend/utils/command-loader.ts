@@ -10,7 +10,8 @@ export class SlashCommandLoader{
 
     async setup(rest: REST, clientID: string) : Promise<Collection<string, CustomCommand>>{
         const commands: RESTPostAPIApplicationCommandsJSONBody[] = [];
-        const client_commands: Collection<string, CustomCommand> = new Collection();
+        const devCommands: RESTPostAPIApplicationCommandsJSONBody[] = [];
+        const clientCommands: Collection<string, CustomCommand> = new Collection();
         //Read files exporting a 'CustomCommand' object from path. Expected folders terminating with '_commands', and only pick up .js files.
         fs.readdir(this.path, {recursive: true}, (err, files) =>{
             if (err == null){
@@ -19,14 +20,17 @@ export class SlashCommandLoader{
                     if (filePath.indexOf('-commands') != -1 && filePath.endsWith('.js')){
                         let command: any = require(filePath);
                         if (command instanceof CustomCommand){
-                            commands.push(command.data.toJSON());
-                            client_commands.set(command.data.name, command);
+                            if (command.devOnly) devCommands.push(command.data.toJSON());
+                            else commands.push(command.data.toJSON());
+                            clientCommands.set(command.data.name, command);
+                            console.log(`${filePath} - Command '${command.data.name}' was set succesfully. `)
                         }
                     }
                 }       
             }
         });
-        await rest.put(Routes.applicationCommands(clientID), {body: commands});
-        return client_commands;
+        await rest.put(Routes.applicationGuildCommands(clientID, ''), {body: devCommands});
+        await rest.put(Routes.applicationCommands(clientID));
+        return clientCommands;
     }
 }

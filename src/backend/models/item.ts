@@ -1,22 +1,22 @@
-import { IDataModel } from "./i-data-model";
+import { DataModel } from "./i-data-model";
 
-export class Item implements IDataModel<Item>{
+export class Item implements DataModel<Item>{
     ID?: number;
     guildID: string;
     name: string;
     description: string;
     weight: number;
     value: number;
-    equipable: boolean;
+    secret: boolean;
     creationDate: Date;
 
-    constructor(guildID: string, name: string, equipable: boolean, creationDate?: Date, description?: string, weight?: number, value?: number, ID?: number){
+    constructor(guildID: string, name: string, secret?: boolean, creationDate?: Date, description?: string, weight?: number, value?: number, ID?: number){
         this.guildID = guildID;
         this.name = name;
         this.description = description;
         this.weight = weight;
         this.value = value;
-        this.equipable = equipable;
+        this.secret = secret;
         this.creationDate = creationDate;
         this.ID = ID;
     }

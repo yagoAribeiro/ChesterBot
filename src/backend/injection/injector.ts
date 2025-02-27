@@ -24,8 +24,8 @@ export class InjectionContainer{
     static init(deps: Map<string, Function | Array<Function>>): void{
         this.Container = deps;
         this.Container.forEach((target: new <T>(...args: any) => T | Array<new <T>(...args: any) => T>, key) => {
-            let predicate: (value: any) => boolean = (n) => Reflect.getMetadata('injectable', n) && (Reflect.getMetadata('env', n) as ENV[] || []).indexOf(CURRENT) != -1;
-            let error: string = `Injector failed to resolve ${target}. Check for duplicate ENVs or lack of it.`;
+            let predicate: (value: any) => boolean = (n) => Reflect.getMetadata('injectable', n) && (Reflect.getMetadata('env', n) as ENV[] || []).length == 0 || (Reflect.getMetadata('env', n) as ENV[] || []).indexOf(CURRENT) != -1;
+            let error: string = `Injector failed to resolve ${target}. Check for duplicate ENVs.`;
             if (target instanceof Array) {
                 let match: Array<new <T>(...args: any) => T> = target.filter(predicate);
                 if (match.length != 1) throw new EvalError(error);
@@ -46,8 +46,8 @@ export class InjectionContainer{
     static resolve(target?: new <T>(...args: any) => T): any{
         const paramTypes: any[] = Reflect.getMetadata('design:paramtypes', target) || [];
         const childDeps = paramTypes.map((n: typeof target) => {
-            let test = this.resolve(n);
-            return test;
+            let on_resolve = this.resolve(n);
+            return on_resolve;
         });
         if (!Reflect.getMetadata('injectable', target) || !Reflect.getMetadata('key', target)) return target;
         let key: string = Reflect.getMetadata('key', target);

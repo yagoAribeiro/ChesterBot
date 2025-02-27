@@ -1,6 +1,6 @@
-import { IDataModel } from "./i-data-model";
+import { DataModel } from "./i-data-model";
 
-class UserItem implements IDataModel<UserItem>{
+class UserItem implements DataModel<UserItem>{
     ID?: number;
     userID: number;
     itemID: number;
