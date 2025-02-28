@@ -1,18 +1,19 @@
 import { ItemAPI } from "../../api/item/item-api";
-import { ENV, injectable, InjectionContainer, SCOPE } from "../../injection/injector";
+import { ENV, SCOPE } from "../../injection/container";
+import {injectable} from "../../injection/injector";
 import { Item } from "../../models/item";
 import { AppConfig } from "../../utils/app-config";
 import { BaseRepo } from "../base-repo";
-import { IitemRepo } from "./i-item-repo";
+import { IitemRepo, ITEM_REPO_KEY } from "./i-item-repo";
 
-@injectable([ENV.Tests], SCOPE.Singleton)
+@injectable([ENV.Tests], SCOPE.Singleton, ITEM_REPO_KEY)
 export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
 
     private __items: Item[] = [];
 
-    constructor(api: ItemAPI) {
+    constructor(api: ItemAPI, config: AppConfig) {
         super(api);
-        const guildID: string = InjectionContainer.get<AppConfig>(AppConfig.name).guildDevID;
+        const guildID: string = config.guildDevID;
         this.__items = [new Item(guildID, 'Espada Longa', true, new Date(), 'Uma espada de lâmina longa e afiada.', 3.5, 100, 1),
             new Item(guildID, 'Escudo de Ferro', false, new Date(), 'Escudo pesado feito de ferro', 6.0, 150, 2),
             new Item(guildID, 'Poção de Cura', true, new Date(), 'Recupera uma grande quantidade de saúde.', 0.5, 50, 3),

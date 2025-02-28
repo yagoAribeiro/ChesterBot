@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ApplicationCommandOptionChoiceData, ApplicationCommandStringOptionData, AutocompleteFocusedOption, ButtonBuilder, ButtonInteraction, ButtonStyle, CacheType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { ActionRowBuilder, ApplicationCommandOptionChoiceData, AutocompleteFocusedOption, ButtonBuilder, ButtonInteraction, ButtonStyle, CacheType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { CustomCommand } from "../../backend/models/custom-command";
 import { ITEM_OPTIONS, itemOptions } from "../../backend/models/command-options/item-options";
 import { IitemRepo, ITEM_REPO_KEY } from "../../backend/repo/item/i-item-repo";
@@ -10,7 +10,7 @@ export = new CustomCommand(new SlashCommandBuilder()
 .setDescription('Delete an item from server.')
 .addStringOption(itemOptions.getCommandOption(ITEM_OPTIONS.name, () => new SlashCommandStringOption().setRequired(true).setAutocomplete(true))),
  async (interaction) => {
-    const itemRepo = InjectionContainer.get<IitemRepo>(ITEM_REPO_KEY);
+    const itemRepo = new InjectionContainer().get<IitemRepo>(ITEM_REPO_KEY);
     const name: string = interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.name));
     const btnConfirm = new ButtonBuilder()
                 .setCustomId('confirm')
@@ -36,7 +36,7 @@ export = new CustomCommand(new SlashCommandBuilder()
 }, true, 
 async (interaction) =>{
     const focusedOption: AutocompleteFocusedOption = interaction.options.getFocused(true);
-    const itemRepo: IitemRepo = InjectionContainer.get<IitemRepo>(ITEM_REPO_KEY);
+    const itemRepo: IitemRepo = new InjectionContainer().get<IitemRepo>(ITEM_REPO_KEY);
     let choices: Item[];
     if (focusedOption.name == itemOptions.getName(ITEM_OPTIONS.name)){
         choices = await itemRepo.getFromAutocomplete(interaction.guildId, focusedOption.value);

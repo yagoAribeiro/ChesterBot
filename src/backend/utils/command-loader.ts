@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import { CustomCommand } from '../models/custom-command';
 import { RESTPostAPIApplicationCommandsJSONBody, REST, Routes, Collection } from 'discord.js';
+import { AppConfig } from './app-config';
+import { InjectionContainer } from '../injection/injector';
 
 export class SlashCommandLoader{
     path: string;
@@ -29,7 +31,8 @@ export class SlashCommandLoader{
                 }       
             }
         });
-        await rest.put(Routes.applicationGuildCommands(clientID, ''), {body: devCommands});
+        const config: AppConfig = new InjectionContainer().get<AppConfig>(AppConfig.name);
+        await rest.put(Routes.applicationGuildCommands(clientID, config.guildDevID), {body: devCommands});
         await rest.put(Routes.applicationCommands(clientID));
         return clientCommands;
     }

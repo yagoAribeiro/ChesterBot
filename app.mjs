@@ -1,9 +1,11 @@
 import { Client, REST, Events, GatewayIntentBits } from 'discord.js';
 import { SlashCommandLoader } from './bin/backend/utils/command-loader.js';
 import { resolve, join } from 'node:path';
-import { InjectionContainer } from './bin/backend/injection/injector.js';
-import { Entries } from './bin/backend/injection/container.js';
-import config from './config.json' with {type: 'json'};
+import { AppConfig } from './bin/backend/utils/app-config.js';
+import { setEntries } from './bin/backend/injection/container.js';
+import { ItemAPI} from './bin/backend/api/item/item-api.js';
+import { ItemTestRepo } from './bin/backend/repo/item/item-repo-test.js';
+import { ItemRepo } from './bin/backend/repo/item/item-repo.js';
 
 const __dirname = resolve();
 const __dircommand = 'bin/slash-commands';
@@ -17,12 +19,11 @@ const client = new Client({
 client.once(Events.ClientReady, readyClient => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
-
+const config = new AppConfig();
 const rest = new REST().setToken(config.token);
 
 //DI
-InjectionContainer.init(Entries);
-
+setEntries([AppConfig, ItemAPI, ItemRepo, ItemTestRepo])
 //Command registering base;
 const commandLoader = new SlashCommandLoader(join(__dirname, __dircommand));
 commandLoader.setup(rest, config.clientID).then((value) => client.commands = value);
@@ -37,6 +38,7 @@ client.on(Events.InteractionCreate, async interaction => {
 		}
 		if (interaction.isChatInputCommand()) {
 			try {
+				console.log(`API latency is ${client.ws.ping} ms`);
 				await command.execute(interaction);
 			}
 			catch (error) {
@@ -44,6 +46,7 @@ client.on(Events.InteractionCreate, async interaction => {
 			}
 		}else if (interaction.isAutocomplete()){
 			try {
+				console.log(`API latency is ${client.ws.ping} ms`);
 				await command.autocomplete(interaction);
 			}
 			catch (error) {

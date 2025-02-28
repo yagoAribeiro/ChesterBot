@@ -14,7 +14,7 @@ export = new CustomCommand(new SlashCommandBuilder()
 .addNumberOption(itemOptions.getCommandOption(ITEM_OPTIONS.weight, () => new SlashCommandNumberOption().setRequired(false)))
 .addBooleanOption(itemOptions.getCommandOption(ITEM_OPTIONS.secret, () => new SlashCommandBooleanOption().setRequired(false))),
 async (interaction) => {
-    const itemRepo = InjectionContainer.get<IitemRepo>(ITEM_REPO_KEY);
+    const itemRepo = new InjectionContainer().get<IitemRepo>(ITEM_REPO_KEY);
     let newItem: Item = new Item(interaction.guildId, 
       interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.name)),
       interaction.options.getBoolean(itemOptions.getName(ITEM_OPTIONS.secret)),

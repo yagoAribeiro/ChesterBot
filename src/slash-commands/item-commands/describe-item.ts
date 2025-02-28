@@ -11,14 +11,14 @@ export = new CustomCommand(new SlashCommandBuilder()
     .setDescription('Describe a global item.')
     .addStringOption(itemOptions.getCommandOption(ITEM_OPTIONS.name, () => new SlashCommandStringOption().setRequired(true).setAutocomplete(true))),
     async (interaction) => {
-        const itemRepo = InjectionContainer.get<IitemRepo>(ITEM_REPO_KEY);
+        const itemRepo: IitemRepo = new InjectionContainer().get<IitemRepo>(ITEM_REPO_KEY);
         const name: string = interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.name));
         const item: Item = await itemRepo.getItemByName(interaction.guildId, name);
         const embed: EmbedItem = new EmbedItem(item);
         await interaction.reply(({embeds: [embed.build()] }));
     }, true, async (interaction) => {
+        const itemRepo: IitemRepo =new InjectionContainer().get<IitemRepo>(ITEM_REPO_KEY);
         const focusedOption: AutocompleteFocusedOption = interaction.options.getFocused(true);
-        const itemRepo: IitemRepo = InjectionContainer.get<IitemRepo>(ITEM_REPO_KEY);
         let choices: Item[];
         if (focusedOption.name == itemOptions.getName(ITEM_OPTIONS.name)) {
             choices = await itemRepo.getFromAutocomplete(interaction.guildId, focusedOption.value);

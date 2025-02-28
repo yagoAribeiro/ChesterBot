@@ -1,8 +1,10 @@
+import { injectable } from '../injection/injector';
+import { ENV, SCOPE } from '../injection/container';
 import { resolve, join } from 'node:path';
 import fs from 'node:fs';
-import { injectable, SCOPE } from '../injection/injector';
 
-@injectable([], SCOPE.Singleton)
+
+@injectable([ENV.Tests, ENV.Live], SCOPE.Singleton, AppConfig.name)
 export class AppConfig {
     clientID: string;
     guildDevID: string;
