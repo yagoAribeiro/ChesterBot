@@ -4,12 +4,14 @@ import { Item } from '../../backend/models/item';
 import { InjectionContainer } from '../../backend/injection/injector';
 import { IitemRepo, ITEM_REPO_KEY } from '../../backend/repo/item/i-item-repo';
 import { itemOptions, ITEM_OPTIONS } from '../../backend/models/command-options/item-options';
+import { EmbedItem } from '../../discord-gadgets/embed-item';
 
 export = new CustomCommand(new SlashCommandBuilder()
 .setName('create_item')
 .setDescription('Create a new item to current server.')
 .addStringOption(itemOptions.getCommandOption(ITEM_OPTIONS.name, () => new SlashCommandStringOption().setRequired(true)))
 .addStringOption(itemOptions.getCommandOption(ITEM_OPTIONS.description, () => new SlashCommandStringOption().setRequired(false)))
+.addStringOption(itemOptions.getCommandOption(ITEM_OPTIONS.effect, () => new SlashCommandStringOption().setRequired(false)))
 .addNumberOption(itemOptions.getCommandOption(ITEM_OPTIONS.value, () => new SlashCommandNumberOption().setRequired(false)))
 .addNumberOption(itemOptions.getCommandOption(ITEM_OPTIONS.weight, () => new SlashCommandNumberOption().setRequired(false)))
 .addBooleanOption(itemOptions.getCommandOption(ITEM_OPTIONS.secret, () => new SlashCommandBooleanOption().setRequired(false))),
@@ -20,6 +22,7 @@ async (interaction) => {
       interaction.options.getBoolean(itemOptions.getName(ITEM_OPTIONS.secret)),
       new Date(),
       interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.description)),
+      interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.effect)),
       interaction.options.getNumber(itemOptions.getName(ITEM_OPTIONS.weight)),
       interaction.options.getNumber(itemOptions.getName(ITEM_OPTIONS.value)));
     const btnConfirm = new ButtonBuilder()
@@ -33,7 +36,8 @@ async (interaction) => {
             .setEmoji('❌')
 			.setStyle(ButtonStyle.Danger);
     const rowBuilder: ActionRowBuilder<ButtonBuilder> = new ActionRowBuilder<ButtonBuilder>().addComponents([btnConfirm, btnCancel]);
-	const response = await interaction.reply({content: `Do you want to create **${newItem.name}** and register it in your server? `, components: [rowBuilder]});
+    const embed: EmbedItem = new EmbedItem(newItem);
+	const response = await interaction.reply({content: `Do you want to create **${newItem.name}** and register it in your server? `, components: [rowBuilder], embeds: [embed.build(true)]});
     const filter = (i: any) => i.user.id === interaction.user.id;
     const confirmation: ButtonInteraction<CacheType> = (await response.awaitMessageComponent({filter: filter, time: 60_000})) as ButtonInteraction;
     if (confirmation.customId === 'confirm'){

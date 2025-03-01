@@ -6,12 +6,14 @@ export enum ITEM_OPTIONS{
     weight,
     value,
     quantity,
-    secret
+    secret,
+    effect
 }
 
 export const itemOptions: CommandOptionsContainer<ITEM_OPTIONS> = new CommandOptionsContainer<ITEM_OPTIONS>(new Map<number, OptionBaseData>([
     [ITEM_OPTIONS.name, new OptionBaseData(ITEM_OPTIONS[ITEM_OPTIONS.name], 'Item\'s name', 256, 2)],
-    [ITEM_OPTIONS.description, new OptionBaseData(ITEM_OPTIONS[ITEM_OPTIONS.description], 'Set item\'s description', 2048, 2)],
+    [ITEM_OPTIONS.description, new OptionBaseData(ITEM_OPTIONS[ITEM_OPTIONS.description], 'Set item\'s description', 1024, 2)],
+    [ITEM_OPTIONS.effect, new OptionBaseData(ITEM_OPTIONS[ITEM_OPTIONS.effect], 'Set item\'s effect', 1024, 2)],
     [ITEM_OPTIONS.weight, new OptionBaseData(ITEM_OPTIONS[ITEM_OPTIONS.weight], 'Item\'s weight. Any real number according to your RPG unit measure')],
     [ITEM_OPTIONS.value, new OptionBaseData(ITEM_OPTIONS[ITEM_OPTIONS.value], 'Item\'s value. Any real number according to your RPG currency.')],
     [ITEM_OPTIONS.quantity, new OptionBaseData(ITEM_OPTIONS[ITEM_OPTIONS.quantity], 'Item\'s quantity to change.')],

@@ -38,7 +38,6 @@ client.on(Events.InteractionCreate, async interaction => {
 		}
 		if (interaction.isChatInputCommand()) {
 			try {
-				console.log(`API latency is ${client.ws.ping} ms`);
 				await command.execute(interaction);
 			}
 			catch (error) {
@@ -46,7 +45,6 @@ client.on(Events.InteractionCreate, async interaction => {
 			}
 		}else if (interaction.isAutocomplete()){
 			try {
-				console.log(`API latency is ${client.ws.ping} ms`);
 				await command.autocomplete(interaction);
 			}
 			catch (error) {
