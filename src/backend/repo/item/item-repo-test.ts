@@ -74,13 +74,15 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
         return Promise.resolve<Item>(this.__items.find((item) => item.ID == itemId));
     }
 
-    getItemByName(guildID: string, itemName: string): Promise<Item | null> {
+    async getItemByName(guildID: string, itemName: string): Promise<Item | null> {
+        await new Promise(resolve => setTimeout(resolve, 3500));
         let item = this.__items.find((item, i) => item.guildID == guildID && item.name.trim().toLowerCase() == itemName.trim().toLowerCase());
         return Promise.resolve(item);
     }
 
-    addItem(item: Item): Promise<void> {
+    async addItem(item: Item): Promise<void> {
         item.ID = this.__items.length;
+        await new Promise(resolve => setTimeout(resolve, 500));
         this.__items.push(item);
         return Promise.resolve();
     }

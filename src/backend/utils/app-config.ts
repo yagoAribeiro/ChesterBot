@@ -2,10 +2,12 @@ import { injectable } from '../injection/injector';
 import { ENV, SCOPE } from '../injection/container';
 import { resolve, join } from 'node:path';
 import fs from 'node:fs';
+import { Client } from 'discord.js';
 
 
 @injectable([ENV.Tests, ENV.Live], SCOPE.Singleton, AppConfig.name)
 export class AppConfig {
+    discordClient: Client;
     clientID: string;
     guildDevID: string;
     token: string;
