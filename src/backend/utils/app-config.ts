@@ -4,7 +4,9 @@ import { resolve, join } from 'node:path';
 import fs from 'node:fs';
 import { Client } from 'discord.js';
 
-
+/**
+ * Custom singleton that holds application data. Expected to be accessible globally with help of a dependency injector.
+ */
 @injectable([ENV.Tests, ENV.Live], SCOPE.Singleton, AppConfig.name)
 export class AppConfig {
     discordClient: Client;

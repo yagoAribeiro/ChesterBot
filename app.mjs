@@ -1,3 +1,13 @@
+/**
+ * Chester is a personal and communitary open source project.
+ * Note that all the code in this project is written by me, but not all ideas are mine.
+ * You are free to use, distribute, or base your own needs on this code, as long as you also distribute
+ * the LICENSE file. Follow the guides accordingly to MIT license.
+ * 
+ * If you find any problems, please, open an issue at https://github.com/yagoAribeiro/ChesterBot/issues;
+ */
+
+
 import { Client, REST, Events, GatewayIntentBits } from 'discord.js';
 import { SlashCommandLoader } from './bin/backend/utils/command-loader.js';
 import { resolve, join } from 'node:path';
@@ -47,7 +57,7 @@ client.on(Events.InteractionCreate, async interaction => {
 			if (err instanceof CommandException){
 				if (err.commandInteraction != null){
 					try{
-						if (err.commandInteraction.replied) await err.commandInteraction.editReply({content: err.message, components: [], embeds: []});
+						if (err.commandInteraction.replied || err.commandInteraction.deferred) await err.commandInteraction.editReply({content: err.message, components: [], embeds: []});
 						else await err.commandInteraction.reply({content: err.message, components: [], embeds: []});
 					}catch(e){
 						console.error(`Could not properly reply to a command exception: ${e}`);

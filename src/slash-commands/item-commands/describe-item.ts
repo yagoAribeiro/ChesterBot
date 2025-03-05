@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionChoiceData, AutocompleteFocusedOption, SlashCommandBuilder, SlashCommandStringOption } from 'discord.js';
+import { SlashCommandBuilder, SlashCommandStringOption } from 'discord.js';
 import { CustomCommand } from '../../backend/models/custom-command';
 import { Item } from '../../backend/models/item';
 import { InjectionContainer } from '../../backend/injection/injector';

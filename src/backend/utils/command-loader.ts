@@ -4,6 +4,9 @@ import { RESTPostAPIApplicationCommandsJSONBody, REST, Routes, Collection } from
 import { AppConfig } from './app-config';
 import { InjectionContainer } from '../injection/injector';
 
+/**
+ * Class that dynamically loads and assigns all "*-commands.js" files to discord client.
+ */
 export class SlashCommandLoader{
     path: string;
     constructor(path: string){
@@ -14,7 +17,7 @@ export class SlashCommandLoader{
         const commands: RESTPostAPIApplicationCommandsJSONBody[] = [];
         const devCommands: RESTPostAPIApplicationCommandsJSONBody[] = [];
         const clientCommands: Collection<string, CustomCommand> = new Collection();
-        //Read files exporting a 'CustomCommand' object from path. Expected folders terminating with '_commands', and only pick up .js files.
+        //Read files exporting a 'CustomCommand' object from path. Expected folders terminating with '-commands', and only pick up .js files.
         fs.readdir(this.path, {recursive: true}, (err, files) =>{
             if (err == null){
                 for (let file of files){

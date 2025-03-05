@@ -1,5 +1,8 @@
 import { ApplicationCommandOptionBase, SlashCommandStringOption } from "discord.js";
 
+/**
+ * Base class to easily share common command options data.
+ */
 export class OptionBaseData{
     private name: string;
     private description: string;

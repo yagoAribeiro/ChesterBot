@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionChoiceData, AutocompleteFocusedOption, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { CustomCommand } from "../../backend/models/custom-command";
 import { ITEM_OPTIONS, itemOptions } from "../../backend/models/command-options/item-options";
 import { IitemRepo, ITEM_REPO_KEY } from "../../backend/repo/item/i-item-repo";

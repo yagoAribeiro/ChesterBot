@@ -6,7 +6,6 @@ import { IitemRepo, ITEM_REPO_KEY } from '../../backend/repo/item/i-item-repo';
 import { itemOptions, ITEM_OPTIONS } from '../../backend/models/command-options/item-options';
 import { EMBED_ITEM_FLAGS, EmbedItem } from '../../discord-gadgets/embed-item';
 import { ConfirmationDialog } from '../../discord-gadgets/confirmation-dialog';
-import { CommandException } from '../../backend/utils/command-exception';
 export = new CustomCommand(new SlashCommandBuilder()
     .setName('create_item')
     .setDescription('Create a new item to current server.')
@@ -26,7 +25,6 @@ export = new CustomCommand(new SlashCommandBuilder()
             interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.effect)),
             interaction.options.getNumber(itemOptions.getName(ITEM_OPTIONS.weight)),
             interaction.options.getNumber(itemOptions.getName(ITEM_OPTIONS.value)));
-        if (newItem.name.length < 2) throw new CommandException('❌ You cannot create an item with only one character!', interaction);
         const dialog: ConfirmationDialog = new ConfirmationDialog((i: any) => i.user.id === interaction.user.id);
         const embed: EmbedItem = new EmbedItem(newItem);
         const response = await interaction.reply({ content: `Do you want to create **${newItem.name}** and register it in your server? `, components: [dialog.build()], embeds: [embed.build(EMBED_ITEM_FLAGS.Create)] });

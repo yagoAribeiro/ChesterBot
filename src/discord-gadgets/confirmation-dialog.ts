@@ -2,6 +2,9 @@ import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, CacheT
 import { InteractionResolver } from "./interaction-resolver";
 
 
+/**
+ * Class that handles discord confirmation action rows.
+ */
 export class ConfirmationDialog {
     filter?: (i: any) => boolean;
 

@@ -3,6 +3,7 @@ import { ENV, SCOPE } from "../../injection/container";
 import {injectable} from "../../injection/injector";
 import { Item } from "../../models/item";
 import { AppConfig } from "../../utils/app-config";
+import { CommandException } from "../../utils/command-exception";
 import { BaseRepo } from "../base-repo";
 import { IitemRepo, ITEM_REPO_KEY } from "./i-item-repo";
 
@@ -75,8 +76,8 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
     }
 
     async getItemByName(guildID: string, itemName: string): Promise<Item | null> {
-        await new Promise(resolve => setTimeout(resolve, 3500));
         let item = this.__items.find((item, i) => item.guildID == guildID && item.name.trim().toLowerCase() == itemName.trim().toLowerCase());
+        if (!item) throw new Error(`❌ Could not find any item named "${itemName}"`);
         return Promise.resolve(item);
     }
 
