@@ -63,11 +63,11 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
         return Promise.resolve([]);
     }
 
-    getAll(guildID: string, depth: number = 1): Promise<Item[]> {
-        let max_depth: number = Math.floor(this.__items.length/16.0);
+    getByDepth(guildID: string, depth: number = 1): Promise<Item[]> {
+        let max_depth: number = Math.floor(this.__items.length/8.0);
         depth = depth > max_depth ? max_depth : depth < 1 ? 1 : depth;
-        let end: number = depth * 16;
-        let start: number = depth - 16;
+        let end: number = depth * 8;
+        let start: number = end - 8;
         let filtered: Array<Item> = this.__items.filter((item) => item.guildID == guildID);
         return Promise.resolve<Item[]>(filtered.slice(start, end));
     }

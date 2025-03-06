@@ -5,7 +5,7 @@ import { AppConfig } from './app-config';
 import { InjectionContainer } from '../injection/injector';
 
 /**
- * Class that dynamically loads and assigns all "*-commands.js" files to discord client.
+ * Class that dynamically loads and assigns all files inside "*-commands" directories to discord client.
  */
 export class SlashCommandLoader{
     path: string;

@@ -1,7 +1,7 @@
 import { Item } from "../../models/item";
 
 export interface IitemRepo {
-    getAll(guildID: string, depth?: number) : Promise<Item[]>
+    getByDepth(guildID: string, depth?: number) : Promise<Item[]>
     getFromAutocomplete(guildID: string, query: string, depth?: number) : Promise<Item[]>
     getItem(itemID: number) : Promise<Item | null>
     getItemByName(guildID: string, itemName: string) : Promise<Item | null>

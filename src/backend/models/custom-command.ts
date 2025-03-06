@@ -9,7 +9,7 @@ export class CustomCommand{
     devOnly: boolean;
     autocomplete?: (interaction: AutocompleteInteraction) => Promise<void>;
 
-    constructor(data: typeof this.data, execute: typeof this.execute, devOnly?: boolean, autocomplete?: typeof this.autocomplete){
+    constructor(data: typeof this.data, execute: (interaction: ChatInputCommandInteraction) => Promise<void>, devOnly?: boolean, autocomplete?: (interaction: AutocompleteInteraction) => Promise<void>){
         this.data = data;
         this.execute = execute;
         this.devOnly = devOnly ?? false;
