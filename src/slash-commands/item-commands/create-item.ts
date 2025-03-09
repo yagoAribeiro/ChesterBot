@@ -10,6 +10,7 @@ export = new CustomCommand(new SlashCommandBuilder()
     .setName('create_item')
     .setDescription('Create a new item to current server.')
     .addStringOption(itemOptions.getCommandOption(ITEM_OPTIONS.name, () => new SlashCommandStringOption().setRequired(true)))
+    .addStringOption(itemOptions.getCommandOption(ITEM_OPTIONS.resume, () => new SlashCommandStringOption().setRequired(false)))
     .addStringOption(itemOptions.getCommandOption(ITEM_OPTIONS.description, () => new SlashCommandStringOption().setRequired(false)))
     .addStringOption(itemOptions.getCommandOption(ITEM_OPTIONS.effect, () => new SlashCommandStringOption().setRequired(false)))
     .addNumberOption(itemOptions.getCommandOption(ITEM_OPTIONS.value, () => new SlashCommandNumberOption().setRequired(false)))
@@ -22,6 +23,7 @@ export = new CustomCommand(new SlashCommandBuilder()
             interaction.options.getBoolean(itemOptions.getName(ITEM_OPTIONS.secret)),
             new Date(),
             interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.description)),
+            interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.resume)),
             interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.effect)),
             interaction.options.getNumber(itemOptions.getName(ITEM_OPTIONS.weight)),
             interaction.options.getNumber(itemOptions.getName(ITEM_OPTIONS.value)));

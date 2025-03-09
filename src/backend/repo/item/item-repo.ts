@@ -12,7 +12,7 @@ export class ItemRepo extends BaseRepo<ItemAPI> implements IitemRepo{
       super(api);
    }
 
-   getByDepth(guildID: string, depth?: number): Promise<Item[]> {
+   getByDepth(guildID: string, depth?: number): Promise<Map<number, Item>> {
       throw new Error("Method not implemented.");
    }
    getFromAutocomplete(guildID: string, query: string, depth?: number): Promise<Item[]> {

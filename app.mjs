@@ -1,5 +1,5 @@
 /**
- * Chester is a personal and communitary open source project.
+ * Chester is a personal open source project.
  * Note that all the code in this project is written by me, but not all ideas are mine.
  * You are free to use, distribute, or base your own needs on this code, as long as you also distribute
  * the LICENSE file. Follow the guides accordingly to MIT license.

@@ -10,13 +10,12 @@ export = new CustomCommand(new SlashCommandBuilder()
     async (interaction) => {
         const repo = new InjectionContainer().get<IitemRepo>(ITEM_REPO_KEY);
         const dialog = new SliderDialog(interaction, async (embed: EmbedBuilder, page: number) => {
-            const items = await repo.getAll(interaction.guildId, page);
-            let i = 0;
-            for (let item of items){
-                embed.addFields({ name: `${i+1}. ${item.name}`, value: `${item.description} | **T\$** ${item.value}|**${item.weight} slots.**` });
-                i++;
-            }
+            const items = await repo.getByDepth(interaction.guildId, page);
+            items.forEach((item, key) => {
+                embed.addFields({ name: `${key+1}. ${item.name}`, value: `${item.resume}`});
+                embed.addFields({name: `T\$ ${item.value} | ${item.weight} slots.`, value: '\u200B'});
+            });
             return embed;
-        }, 6);
+            }, 6);
         await dialog.build();
     }, true);

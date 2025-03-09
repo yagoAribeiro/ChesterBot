@@ -4,6 +4,7 @@ export class Item implements DataModel<Item>{
     ID?: number;
     guildID: string;
     name: string;
+    resume: string;
     description: string;
     effect: string;
     weight: number;
@@ -11,9 +12,10 @@ export class Item implements DataModel<Item>{
     secret: boolean;
     creationDate: Date;
 
-    constructor(guildID: string, name: string, secret?: boolean, creationDate?: Date, description?: string, effect?: string, weight?: number, value?: number, ID?: number){
+    constructor(guildID: string, name: string, secret?: boolean, creationDate?: Date,description?: string, resume?: string, effect?: string, weight?: number, value?: number, ID?: number){
         this.guildID = guildID;
         this.name = name;
+        this.resume = resume;
         this.description = description;
         this.weight = weight;
         this.value = value;
