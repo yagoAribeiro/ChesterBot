@@ -3,10 +3,10 @@ import { CustomCommand } from '../../backend/models/custom-command';
 import { Item } from '../../backend/models/item';
 import { InjectionContainer } from '../../backend/injection/injector';
 import { IitemRepo, ITEM_REPO_KEY } from '../../backend/repo/item/i-item-repo';
-import { itemOptions, ITEM_OPTIONS } from '../../backend/models/command-options/item-options';
+import { itemOptions, ITEM_OPTIONS } from '../../backend/utils/command-options/item-options';
 import { EMBED_ITEM_FLAGS, EmbedItem } from '../../discord-gadgets/embed-item';
 import { InteractionResolver } from '../../discord-gadgets/interaction-resolver';
-import { ItemNameAutocomplete } from '../../backend/models/autocomplete-handlers/item-name-ac';
+import { ItemNameAutocomplete } from '../../backend/utils/autocomplete-handlers/item-name-ac';
 
 export = new CustomCommand(new SlashCommandBuilder()
     .setName('describe_item')

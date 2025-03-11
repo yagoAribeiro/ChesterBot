@@ -11,6 +11,9 @@ export class ItemRepo extends BaseRepo<ItemAPI> implements IitemRepo{
    constructor(api: ItemAPI){
       super(api);
    }
+   getMaxDepth(guildID: string): Promise<number> {
+      throw new Error("Method not implemented.");
+   }
 
    getByDepth(guildID: string, depth?: number): Promise<Map<number, Item>> {
       throw new Error("Method not implemented.");

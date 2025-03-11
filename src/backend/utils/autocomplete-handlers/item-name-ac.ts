@@ -3,7 +3,7 @@ import { IAutoCompleteHandler } from "./i-ac";
 import { InjectionContainer } from "../../injection/injector";
 import { IitemRepo, ITEM_REPO_KEY } from "../../repo/item/i-item-repo";
 import { ITEM_OPTIONS, itemOptions } from "../command-options/item-options";
-import { Item } from "../item";
+import { Item } from "../../models/item";
 
 
 export class ItemNameAutocomplete implements IAutoCompleteHandler {

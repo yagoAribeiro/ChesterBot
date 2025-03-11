@@ -1,6 +1,10 @@
+import { StringSelectMenuOptionBuilder } from "discord.js";
 import { DataModel } from "./i-data-model";
 
 class UserItem implements DataModel<UserItem>{
+    toSelectOption(): StringSelectMenuOptionBuilder {
+        throw new Error("Method not implemented.");
+    }
     ID?: number;
     userID: number;
     itemID: number;

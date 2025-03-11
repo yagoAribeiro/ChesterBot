@@ -1,13 +1,13 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { CustomCommand } from "../../backend/models/custom-command";
-import { ITEM_OPTIONS, itemOptions } from "../../backend/models/command-options/item-options";
+import { ITEM_OPTIONS, itemOptions } from "../../backend/utils/command-options/item-options";
 import { IitemRepo, ITEM_REPO_KEY } from "../../backend/repo/item/i-item-repo";
 import { InjectionContainer } from "../../backend/injection/injector";
 import { Item } from "../../backend/models/item";
 import { EMBED_ITEM_FLAGS, EmbedItem } from "../../discord-gadgets/embed-item";
 import { InteractionResolver } from "../../discord-gadgets/interaction-resolver";
 import { ConfirmationDialog } from "../../discord-gadgets/confirmation-dialog";
-import { ItemNameAutocomplete } from "../../backend/models/autocomplete-handlers/item-name-ac";
+import { ItemNameAutocomplete } from "../../backend/utils/autocomplete-handlers/item-name-ac";
 
 export = new CustomCommand(new SlashCommandBuilder()
     .setName('delete_item')

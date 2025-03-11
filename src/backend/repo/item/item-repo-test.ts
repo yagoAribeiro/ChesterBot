@@ -54,6 +54,9 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
         ];
         this.__items.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0);
     }
+    getMaxDepth(guildID: string): Promise<number> {
+        return Promise.resolve(Math.ceil(this.__items.filter((item) => item.guildID == guildID).length/8.0));
+    }
 
     getFromAutocomplete(guildID: string, query: string): Promise<Item[]> {
         if (query.length >= 1) {
@@ -63,8 +66,8 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
         return Promise.resolve([]);
     }
 
-    getByDepth(guildID: string, depth: number = 1): Promise<Map<number, Item>> {
-        let max_depth: number = Math.floor(this.__items.length/8.0);
+   async getByDepth(guildID: string, depth: number = 1): Promise<Map<number, Item>> {
+        let max_depth: number = await this.getMaxDepth(guildID);
         depth = depth > max_depth ? max_depth : depth < 1 ? 1 : depth;
         let end: number = depth * 8;
         let start: number = end - 8;

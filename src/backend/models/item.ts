@@ -1,3 +1,4 @@
+import { StringSelectMenuOptionBuilder } from "discord.js";
 import { DataModel } from "./i-data-model";
 
 export class Item implements DataModel<Item>{
@@ -23,6 +24,9 @@ export class Item implements DataModel<Item>{
         this.creationDate = creationDate;
         this.effect = effect;
         this.ID = ID;
+    }
+    toSelectOption(index?: number): StringSelectMenuOptionBuilder {
+        return new StringSelectMenuOptionBuilder().setLabel(`${(index == null ? '' : index.toString()+'. ')}${this.name}`).setValue(this.ID.toString());
     }
 
     toMap(): Map<string, any> {
