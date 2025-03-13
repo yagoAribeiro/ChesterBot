@@ -19,10 +19,9 @@ export = new CustomCommand(new SlashCommandBuilder()
         const dialog: ConfirmationDialog = new ConfirmationDialog((i: any) => i.user.id === interaction.user.id);
         let item: Item;
         let embed: EmbedItem;
-        await new InteractionResolver(interaction).resolve(async () => {
-            item = await itemRepo.getItemByName(interaction.guildId, name);
-            embed = new EmbedItem(item);
-        });
+        await interaction.deferReply();
+        item = await itemRepo.getItemByName(interaction.guildId, name);
+        embed = new EmbedItem(item);
         const response = await interaction.editReply({ content: `⚠️ Are you sure you want to delete **${name}** from your server and all inventories? `, components: [dialog.build()], embeds: [embed.build(EMBED_ITEM_FLAGS.Delete)] });
         await dialog.handle(response, async (_) => {
             await itemRepo.delete(item.ID);

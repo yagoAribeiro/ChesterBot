@@ -27,5 +27,5 @@ export = new CustomCommand(new SlashCommandBuilder()
             let updatedModel = await repo.getItem(id);
             return new EmbedItem(updatedModel).build(EMBED_ITEM_FLAGS.View);
         });
-        await dialog.build();
+        await dialog.build().catch(err => console.log(err));
     }, true);

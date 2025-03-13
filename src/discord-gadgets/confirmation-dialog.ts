@@ -28,7 +28,10 @@ export class ConfirmationDialog {
 
     async handle(response: InteractionResponse<boolean> | Message<boolean>, onOk?: (confirmation: ButtonInteraction<CacheType>) => Promise<void>, onCancel?: (confirmation: ButtonInteraction<CacheType>) => Promise<void>): Promise<void>{
         const confirmation: ButtonInteraction<CacheType> = (await response.awaitMessageComponent({filter: this.filter, time: 60_000})) as ButtonInteraction;
-        if (confirmation.customId === 'confirm' && onOk) await new InteractionResolver(confirmation).resolve(async () => {await onOk(confirmation)}); 
+        await confirmation.deferUpdate();
+        if (confirmation.customId === 'confirm' && onOk){
+            await onOk(confirmation);
+        } 
         else if (onCancel) await onCancel(confirmation);
     }
 

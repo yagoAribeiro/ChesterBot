@@ -27,20 +27,18 @@ export class SliderDialog<TModel extends DataModel> {
         message = await this.commandInteraction.editReply({ embeds: [await this.buildEmbeds()], components: [this.buildMenuRow(), this.buildButtonRow()] });
         const buttonCollector = message.createMessageComponentCollector({ componentType: ComponentType.Button, time: 120_000 });
         buttonCollector.on('collect', async i => {
-            if (i.user.id === this.commandInteraction.user.id) {
-                let r = await i.deferUpdate();
-                if (i.customId != 'return') {
-                    this.page += i.customId == 'left' ? -1 : 1;
-                    this.page = this.page >= 1 && this.page <= this.maxPage ? this.page : this.page < 1 ? this.maxPage : 1;
-                }
-                await r.edit({ embeds: [await this.buildEmbeds()], components: [this.buildMenuRow(), this.buildButtonRow()] });
-            } else {
-                i.reply({ content: `Hey, these buttons aren't for you!`, flags: MessageFlags.Ephemeral });
+            let r = await i.deferUpdate();
+            if (i.customId != 'return') {
+                this.page += i.customId == 'left' ? -1 : 1;
+                this.page = this.page >= 1 && this.page <= this.maxPage ? this.page : this.page < 1 ? this.maxPage : 1;
             }
+            await r.edit({ embeds: [await this.buildEmbeds()], components: [this.buildMenuRow(), this.buildButtonRow()] });
         });
         buttonCollector.on('end', _ => {
             console.log(`"${this.commandInteraction.channelId}" button interaction collector ended succesfully.`);
-            message.edit({content: '*Im not listening to this anymore!*', components: [] });
+        });
+        buttonCollector.on('dispose', _ => {
+            console.log(`"${this.commandInteraction.channelId}" button interaction collector got disposed.`);
         });
         const selectionCollector = message.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 120_000 });
         selectionCollector.on('collect', async i => {
@@ -58,9 +56,13 @@ export class SliderDialog<TModel extends DataModel> {
             }
         });
         selectionCollector.on('end', _ => {
-            console.log(`"${this.commandInteraction.channelId}" string select menu interaction collector ended succesfully.`);
+            console.log(`"${this.commandInteraction.channelId}" select interaction collector ended succesfully.`);
+        });
+        selectionCollector.on('dispose', _ => {
+            console.log(`"${this.commandInteraction.channelId}" select interaction collector got disposed.`);
         });
         return response;
+
     }
 
     private buildButtonRow(): ActionRowBuilder<ButtonBuilder> {
@@ -80,7 +82,7 @@ export class SliderDialog<TModel extends DataModel> {
 
     private buildMenuRow(): ActionRowBuilder<StringSelectMenuBuilder> {
         const modelsAsOptions: StringSelectMenuOptionBuilder[] = [];
-        this.models.forEach((value, key) => modelsAsOptions.push(value.toSelectOption(key)));
+        this.models.forEach((value, key) => modelsAsOptions.push(value.toSelectOption(key+1)));
         const menu = new StringSelectMenuBuilder()
             .setCustomId('selector')
             .setPlaceholder('Select an item to describe')
