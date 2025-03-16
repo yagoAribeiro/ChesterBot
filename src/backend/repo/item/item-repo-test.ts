@@ -1,6 +1,6 @@
 import { ItemAPI } from "../../api/item/item-api";
 import { ENV, SCOPE } from "../../injection/container";
-import {injectable} from "../../injection/injector";
+import { injectable } from "../../injection/injector";
 import { Item } from "../../models/item";
 import { AppConfig } from "../../utils/app-config";
 import { CommandException } from "../../utils/command-exception";
@@ -11,12 +11,13 @@ import { IitemRepo, ITEM_REPO_KEY } from "./i-item-repo";
 export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
 
     private __items: Item[] = [];
+    private lastSort?: number = null;
 
     constructor(api: ItemAPI, config: AppConfig) {
         super(api);
         const guildID: string = config.guildDevID;
         this.__items = [
-            new Item(guildID, "Sword of Valor", false, new Date(), "A legendary sword forged in the fires of a dragon's lair. Its blade is etched with ancient runes that glow faintly in the dark.", "A legendary sword with glowing runes, increasing attack power and critical damage chance.", "",10, 100, 1),
+            new Item(guildID, "Sword of Valor", false, new Date(), "A legendary sword forged in the fires of a dragon's lair. Its blade is etched with ancient runes that glow faintly in the dark.", "A legendary sword with glowing runes, increasing attack power and critical damage chance.", "", 10, 100, 1),
             new Item(guildID, "Shield of Protection", false, new Date(), "A massive shield crafted by the dwarves, made from enchanted steel. It has intricate carvings depicting scenes of ancient battles.", "A massive shield that blocks physical damage and reflects damage back at attackers.", "", 15, 120, 2),
             new Item(guildID, "Healing Potion", false, new Date(), "A small vial containing a glowing, green liquid. It radiates warmth and has a soothing scent, promising relief from pain and injury.", "Restores 50 health over 10 seconds with a chance to heal an extra 25 health.", "", 0.5, 30, 3),
             new Item(guildID, "Magic Staff", false, new Date(), "A long, slender staff carved from an ancient tree in the mystical forest. The top is crowned with a crystal that pulses with magical energy.", "Increases magic power, reduces spell cooldowns, and enhances elemental magic.", "", 8, 200, 4),
@@ -55,7 +56,7 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
         this.__items.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0);
     }
     getMaxDepth(guildID: string): Promise<number> {
-        return Promise.resolve(Math.ceil(this.__items.filter((item) => item.guildID == guildID).length/8.0));
+        return Promise.resolve(Math.ceil(this.__items.filter((item) => item.guildID == guildID).length / 8.0));
     }
 
     getFromAutocomplete(guildID: string, query: string): Promise<Item[]> {
@@ -66,16 +67,17 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
         return Promise.resolve([]);
     }
 
-   async getByDepth(guildID: string, depth: number = 1): Promise<Map<number, Item>> {
+    async getByDepth(guildID: string, depth: number = 1, sorting?: number): Promise<Map<number, Item>> {
         let max_depth: number = await this.getMaxDepth(guildID);
         depth = depth > max_depth ? max_depth : depth < 1 ? 1 : depth;
         let end: number = depth * 8;
         let start: number = end - 8;
+        this.__items = this.lastSort == sorting ? this.__items : this.__items.sort((a, b) => (sorting == 0 ? 1 : -1) * (a.name > b.name ? 1 : a.name < b.name ? -1 : 0));
         let filtered: Map<number, Item> = new Map();
-        for (let i = 0; i < this.__items.length; i++){
+        for (let i = 0; i < this.__items.length; i++) {
             if (i >= start && i < end && this.__items[i].guildID == guildID) filtered.set(i, this.__items[i]);
         }
-        return Promise.resolve<Map<number, Item>>(filtered);
+        return Promise.resolve<Map<number, Item>>(filtered);//Sorts
     }
     getItem(itemId: number): Promise<Item | null> {
         return Promise.resolve<Item>(this.__items.find((item) => item.ID == itemId));

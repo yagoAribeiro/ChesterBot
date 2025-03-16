@@ -1,5 +1,4 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, CacheType, InteractionResponse, Message } from "discord.js";
-import { InteractionResolver } from "./interaction-resolver";
 
 
 /**

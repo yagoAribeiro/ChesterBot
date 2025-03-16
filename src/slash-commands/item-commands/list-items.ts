@@ -1,4 +1,4 @@
-import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import { EmbedBuilder, Guild, SlashCommandBuilder } from "discord.js";
 import { CustomCommand } from "../../backend/models/custom-command";
 import { SliderDialog } from "../../discord-gadgets/slider-dialog";
 import { InjectionContainer } from "../../backend/injection/injector";
@@ -8,7 +8,15 @@ import { EMBED_ITEM_FLAGS, EmbedItem } from "../../discord-gadgets/embed-item";
 
 export = new CustomCommand(new SlashCommandBuilder()
     .setName('list_items')
-    .setDescription('List all non secret items of this server.'),
+    .setDescription('List all non secret items of this server.')
+    .addStringOption(option =>
+        option.setName('sorting')
+            .setDescription(`Sort the list of items, accordingly to its alphanumerical name.`)
+            .setRequired(true)
+            .addChoices(
+                { name: 'Ascending', value: '0' },
+                { name: 'Descending', value: '1' },
+            )),
     async (interaction) => {
         await interaction.deferReply();
         const repo = new InjectionContainer().get<IitemRepo>(ITEM_REPO_KEY);
@@ -16,6 +24,8 @@ export = new CustomCommand(new SlashCommandBuilder()
         const dialog = new SliderDialog<Item>(interaction, maxDepth, async (models) => {
             const embed = new EmbedBuilder().setTitle(`${interaction.guild.name}'s registered items.`)
                 .setColor(0x755630)
+                .setThumbnail(interaction.guild.iconURL())
+                .setAuthor({ name: `Summoned by ${interaction.user.globalName}`, iconURL: interaction.user.avatarURL() })
                 .setDescription(`All ${interaction.guild.name}'s public items.`)
                 .addFields({ name: '\u200B', value: '\u200B' });
             models.forEach((item, key) => {
@@ -23,7 +33,7 @@ export = new CustomCommand(new SlashCommandBuilder()
                 embed.addFields({ name: `T\$ ${item.value} | ${item.weight} slots.`, value: '\u200B' });
             });
             return embed;
-        }, async (page) => await repo.getByDepth(interaction.guild.id, page), async (id) => {
+        }, async (page) => await repo.getByDepth(interaction.guild.id, page, Number.parseInt(interaction.options.getString('sorting'))), async (id) => {
             let updatedModel = await repo.getItem(id);
             return new EmbedItem(updatedModel).build(EMBED_ITEM_FLAGS.View);
         });

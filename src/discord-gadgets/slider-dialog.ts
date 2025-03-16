@@ -1,7 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, ComponentType, EmbedBuilder, InteractionResponse, Message, MessageFlags, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
 import { DataModel } from "../backend/models/i-data-model";
-import { on } from "process";
-
 
 export class SliderDialog<TModel extends DataModel> {
     private builder: (models: Map<number, TModel>) => Promise<EmbedBuilder>;
@@ -37,9 +35,6 @@ export class SliderDialog<TModel extends DataModel> {
         buttonCollector.on('end', _ => {
             console.log(`"${this.commandInteraction.channelId}" button interaction collector ended succesfully.`);
         });
-        buttonCollector.on('dispose', _ => {
-            console.log(`"${this.commandInteraction.channelId}" button interaction collector got disposed.`);
-        });
         const selectionCollector = message.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 120_000 });
         selectionCollector.on('collect', async i => {
             let r = await i.deferUpdate();
@@ -57,9 +52,6 @@ export class SliderDialog<TModel extends DataModel> {
         });
         selectionCollector.on('end', _ => {
             console.log(`"${this.commandInteraction.channelId}" select interaction collector ended succesfully.`);
-        });
-        selectionCollector.on('dispose', _ => {
-            console.log(`"${this.commandInteraction.channelId}" select interaction collector got disposed.`);
         });
         return response;
 

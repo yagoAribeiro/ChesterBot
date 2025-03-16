@@ -5,7 +5,6 @@ import { IitemRepo, ITEM_REPO_KEY } from "../../backend/repo/item/i-item-repo";
 import { InjectionContainer } from "../../backend/injection/injector";
 import { Item } from "../../backend/models/item";
 import { EMBED_ITEM_FLAGS, EmbedItem } from "../../discord-gadgets/embed-item";
-import { InteractionResolver } from "../../discord-gadgets/interaction-resolver";
 import { ConfirmationDialog } from "../../discord-gadgets/confirmation-dialog";
 import { ItemNameAutocomplete } from "../../backend/utils/autocomplete-handlers/item-name-ac";
 
