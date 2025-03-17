@@ -1,8 +1,5 @@
 /**
- * Chester is a personal open source project.
- * Note that all the code in this project is written by me, but not all ideas are mine.
- * You are free to use, distribute, or base your own needs on this code, as long as you also distribute
- * the LICENSE file. Follow the guides accordingly to MIT license.
+ * Check the LICENSE file before any modifications or use of this code.
  * 
  * If you find any problems, please, open an issue at https://github.com/yagoAribeiro/ChesterBot/issues;
  */
