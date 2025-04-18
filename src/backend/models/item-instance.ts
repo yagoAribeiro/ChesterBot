@@ -2,9 +2,9 @@ import { StringSelectMenuOptionBuilder } from "discord.js";
 import { DataModel } from "./i-data-model";
 import { Item } from "./item";
 
-class ItemInstance implements DataModel<ItemInstance>{
-    toSelectOption(): StringSelectMenuOptionBuilder {
-        throw new Error("Method not implemented.");
+export class ItemInstance implements DataModel<ItemInstance>{
+    toSelectOption(): Promise<StringSelectMenuOptionBuilder> {
+        throw new Error();
     }
     ID?: number;
     inventoryID: number;
@@ -21,6 +21,9 @@ class ItemInstance implements DataModel<ItemInstance>{
         this.index = index;
         this.lastUpdate = lastUpdate;
         this.ID = ID;
+    }
+    compareTo(b: ItemInstance): number {
+       return this.index > b.index ? 1 : this.index < b.index ? -1 : 0;
     }
 
     toMap(): Map<string, string> {

@@ -10,7 +10,7 @@ import { SlashCommandLoader } from './bin/backend/utils/command-loader.js';
 import { resolve, join } from 'node:path';
 import { AppConfig } from './bin/backend/utils/app-config.js';
 import { setEntries } from './bin/backend/injection/container.js';
-import { InjectionContainer } from './bin/backend/injection/injector.js';
+import {InventoryRepoTests} from './bin/backend/repo/inventory/inventory-repo-tests.js';
 import { ItemAPI } from './bin/backend/api/item/item-api.js';
 import { ItemTestRepo } from './bin/backend/repo/item/item-repo-test.js';
 import { ItemRepo } from './bin/backend/repo/item/item-repo.js';
@@ -20,8 +20,7 @@ const __dirname = resolve();
 const __dircommand = 'bin/slash-commands';
 
 //DI
-setEntries([AppConfig, ItemAPI, ItemRepo, ItemTestRepo])
-const config = new InjectionContainer().get('AppConfig');
+setEntries([AppConfig, ItemAPI, ItemRepo, ItemTestRepo, InventoryRepoTests]);
 
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages,

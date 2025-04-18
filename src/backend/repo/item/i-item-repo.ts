@@ -1,14 +1,14 @@
 import { Item } from "../../models/item";
 
-export interface IitemRepo {
-    getByDepth(guildID: string, depth?: number, sorting?: number) : Promise<Map<number, Item>>
-    getMaxDepth(guildID: string) : Promise<number>
-    getFromAutocomplete(guildID: string, query: string, depth?: number) : Promise<Item[]>
+export interface IitemRepo{
     getItem(itemID: number) : Promise<Item | null>
     getItemByName(guildID: string, itemName: string) : Promise<Item | null>
     addItem(item: Item) : Promise<void>
     updateItem(itemID: number, model: Item) : Promise<void>
-    delete(itemID: number) : Promise<void>
+    deleteItem(itemID: number) : Promise<void>
+    getItemsByDepth(guildID: string, depth: number) : Promise<Map<number, Item>>
+    getItemsFromAutocomplete(guildID: string, query: string): Promise<Item[]>
+    getMaxDepth(guildID: string): Promise<number> 
 }
 
 export const ITEM_REPO_KEY: string = 'IitemRepo';

@@ -11,16 +11,6 @@ export class ItemRepo extends BaseRepo<ItemAPI> implements IitemRepo{
    constructor(api: ItemAPI){
       super(api);
    }
-   getMaxDepth(guildID: string): Promise<number> {
-      throw new Error("Method not implemented.");
-   }
-
-   getByDepth(guildID: string, depth?: number,  sorting?: number): Promise<Map<number, Item>> {
-      throw new Error("Method not implemented.");
-   }
-   getFromAutocomplete(guildID: string, query: string, depth?: number): Promise<Item[]> {
-      throw new Error("Method not implemented.");
-   }
    getItem(itemID: number): Promise<Item | null> {
       throw new Error("Method not implemented.");
    }
@@ -33,9 +23,19 @@ export class ItemRepo extends BaseRepo<ItemAPI> implements IitemRepo{
    updateItem(itemID: number, model: Item): Promise<void> {
       throw new Error("Method not implemented.");
    }
-   delete(itemID: number): Promise<void> {
+   deleteItem(itemID: number): Promise<void> {
       throw new Error("Method not implemented.");
    }
+   getItemsByDepth(guildID: string, depth: number): Promise<Map<number, Item>> {
+      throw new Error("Method not implemented.");
+   }
+   getItemsFromAutocomplete(guildID: string, query: string): Promise<Item[]> {
+      throw new Error("Method not implemented.");
+   }
+   getMaxDepth(guildID: string): Promise<number> {
+      throw new Error("Method not implemented.");
+   }
+  
   
  
 }

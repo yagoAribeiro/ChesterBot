@@ -3,7 +3,6 @@ import { ENV, SCOPE } from "../../injection/container";
 import { injectable } from "../../injection/injector";
 import { Item } from "../../models/item";
 import { AppConfig } from "../../utils/app-config";
-import { CommandException } from "../../utils/command-exception";
 import { BaseRepo } from "../base-repo";
 import { IitemRepo, ITEM_REPO_KEY } from "./i-item-repo";
 
@@ -59,7 +58,7 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
         return Promise.resolve(Math.ceil(this.__items.filter((item) => item.guildID == guildID).length / 8.0));
     }
 
-    getFromAutocomplete(guildID: string, query: string): Promise<Item[]> {
+    getItemsFromAutocomplete(guildID: string, query: string): Promise<Item[]> {
         if (query.length >= 1) {
             let filtered: Array<Item> = this.__items.filter((item) => item.guildID == guildID && item.name.trim().toLowerCase().includes(query.trim().toLowerCase()));
             return Promise.resolve(filtered.slice(0, Math.min(filtered.length, 20)));
@@ -67,12 +66,12 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
         return Promise.resolve([]);
     }
 
-    async getByDepth(guildID: string, depth: number = 1, sorting?: number): Promise<Map<number, Item>> {
+    async getItemsByDepth(guildID: string, depth: number = 1, sorting?: number): Promise<Map<number, Item>> {
         let max_depth: number = await this.getMaxDepth(guildID);
         depth = depth > max_depth ? max_depth : depth < 1 ? 1 : depth;
         let end: number = depth * 8;
         let start: number = end - 8;
-        this.__items = this.lastSort == sorting ? this.__items : this.__items.sort((a, b) => (sorting == 0 ? 1 : -1) * (a.name > b.name ? 1 : a.name < b.name ? -1 : 0));
+        this.__items = this.lastSort == sorting ? this.__items : this.__items.sort((a, b) => (sorting == 0 ? 1 : -1) * a.compareTo(b));
         let filtered: Map<number, Item> = new Map();
         for (let i = 0; i < this.__items.length; i++) {
             if (i >= start && i < end && this.__items[i].guildID == guildID) filtered.set(i, this.__items[i]);
@@ -100,7 +99,7 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
         this.__items[index] = model;
         return Promise.resolve();
     }
-    delete(itemId: number): Promise<void> {
+    deleteItem(itemId: number): Promise<void> {
         let index: number = this.__items.findIndex((item) => item.ID == itemId);
         this.__items.splice(index, 1);
         return Promise.resolve();
