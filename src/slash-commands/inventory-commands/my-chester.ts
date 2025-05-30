@@ -2,7 +2,6 @@ import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { CustomCommand } from "../../backend/models/custom-command";
 import { SliderDialog } from "../../discord-gadgets/slider-dialog";
 import { InjectionContainer } from "../../backend/injection/injector";
-import { EMBED_ITEM_FLAGS } from "../../discord-gadgets/embed-item";
 import { IinventoryRepo, INVENTORY_REPO_KEY } from "../../backend/repo/inventory/i-inventory-repo";
 import { Inventory } from "../../backend/models/inventory";
 import { ItemInstance } from "../../backend/models/item-instance";
@@ -25,7 +24,7 @@ export = new CustomCommand(new SlashCommandBuilder()
                 .setAuthor({ name: `Summoned by ${interaction.user.displayName}`, iconURL: interaction.user.avatarURL() })
                 .setDescription(`All the items that ${interaction.user.displayName}'s Chester ate.`)
                 .addFields({ name: `Item value`, value: `T\$ ${(await repo.getTotalItemValue(inventory.ID)).toFixed(2)}`, inline: true })
-                .addFields({ name: `Total weight`, value: `${(await repo.getTotalWeight(inventory.ID)).toFixed(2)} Slots`, inline: true })
+                .addFields({ name: `Total weight`, value: `${(await repo.getTotalWeight(inventory.ID)).toFixed(2)}${inventory.maxWeight ? ' / '+ inventory.maxWeight.toFixed(2) : ''} Slots`, inline: true })
                 .addFields({ name: `Currency`, value: `T\$ ${inventory.currency ?? 'N/A'}`, inline: true })
                 .addFields({ name: '\u200B', value: '\u200B' });
             models.forEach((instance, key) => {

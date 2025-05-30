@@ -5,7 +5,6 @@ import { ItemInstance } from "../../models/item-instance";
 import { IinventoryRepo, INVENTORY_REPO_KEY } from "./i-inventory-repo";
 import { IitemRepo, ITEM_REPO_KEY } from "../item/i-item-repo";
 import { Item } from "../../models/item";
-import { CommandException } from "../../utils/command-exception";
 
 @injectable([ENV.Tests], SCOPE.Singleton, INVENTORY_REPO_KEY)
 export class InventoryRepoTests implements IinventoryRepo {
@@ -19,7 +18,7 @@ export class InventoryRepoTests implements IinventoryRepo {
     }
 
     createInventory(guildID: string, userID: string, type: number): Promise<Inventory> {
-        let inventory: Inventory = new Inventory(guildID, type, userID, this.inventories.length + 1);
+        let inventory: Inventory = new Inventory(guildID, type, userID, null, null, this.inventories.length + 1);
         this.inventories.push(inventory);
         return Promise.resolve(inventory);
     }
@@ -53,6 +52,13 @@ export class InventoryRepoTests implements IinventoryRepo {
         return Promise.resolve([]);
     }
 
+     async update(inventoryID: number, currency?: number, maxWeight?: number): Promise<Inventory> {
+        let inventory: Inventory = await this.getInventory(inventoryID);
+        if (!currency && !maxWeight) throw new Error('You need to update something!');
+        if (currency) inventory.currency = currency;
+        if (maxWeight) inventory.maxWeight = maxWeight;
+        return Promise.resolve(inventory);
+    }
 
     async getMaxDepth(inventoryID: number): Promise<number> {
         return Math.ceil(await this.getItemCount(inventoryID) / 8.0);
