@@ -33,7 +33,7 @@ export = new CustomCommand(new SlashCommandBuilder()
                 embed.addFields({ name: `T\$ ${item.value} | ${item.weight} slots.`, value: '\u200B' });
             });
             return embed;
-        }, async (page) => await repo.getByDepth(interaction.guild.id, page, Number.parseInt(interaction.options.getString('sorting'))), async (id) => {
+        }, async (page) => await repo.getItemsByDepth(interaction.guild.id, page, Number.parseInt(interaction.options.getString('sorting'))), async (id) => {
             let updatedModel = await repo.getItem(id);
             return new EmbedItem(updatedModel).build(EMBED_ITEM_FLAGS.View);
         });

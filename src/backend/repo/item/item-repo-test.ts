@@ -11,6 +11,7 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
 
     private __items: Item[] = [];
     private lastSort?: number = null;
+    private nextIndex: number = 0;
 
     constructor(api: ItemAPI, config: AppConfig) {
         super(api);
@@ -53,13 +54,14 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
             new Item(guildID, "Potion of Fire Resistance", false, new Date(), "A fiery-red potion contained in a vial of glass. It is said to protect the drinker from the burning touch of flames.", "Grants fire resistance and increases fire resistance for the next hour.", "", 0.3, 70, 35)
         ];
         this.__items.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0);
+        this.nextIndex = this.__items.length + 1;
     }
     getMaxDepth(guildID: string): Promise<number> {
         return Promise.resolve(Math.ceil(this.__items.filter((item) => item.guildID == guildID).length / 8.0));
     }
 
     getItemsFromAutocomplete(guildID: string, query: string): Promise<Item[]> {
-        if (query.length >= 1) {
+        if (query.length > 1) {
             let filtered: Array<Item> = this.__items.filter((item) => item.guildID == guildID && item.name.trim().toLowerCase().includes(query.trim().toLowerCase()));
             return Promise.resolve(filtered.slice(0, Math.min(filtered.length, 20)));
         }
@@ -88,8 +90,8 @@ export class ItemTestRepo extends BaseRepo<ItemAPI> implements IitemRepo {
         return Promise.resolve(item);
     }
 
-    async addItem(item: Item): Promise<void> {
-        item.ID = this.__items.length;
+    async createItem(item: Item): Promise<void> {
+        item.ID = this.nextIndex++;
         await new Promise(resolve => setTimeout(resolve, 500));
         this.__items.push(item);
         return Promise.resolve();

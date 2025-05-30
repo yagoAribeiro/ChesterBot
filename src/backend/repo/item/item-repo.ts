@@ -17,7 +17,7 @@ export class ItemRepo extends BaseRepo<ItemAPI> implements IitemRepo{
    getItemByName(guildID: string, itemName: string): Promise<Item | null> {
       throw new Error("Method not implemented.");
    }
-   addItem(item: Item): Promise<void> {
+   createItem(item: Item): Promise<void> {
       throw new Error("Method not implemented.");
    }
    updateItem(itemID: number, model: Item): Promise<void> {

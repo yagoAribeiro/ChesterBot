@@ -31,12 +31,11 @@ export = new CustomCommand(new SlashCommandBuilder()
         const embed: EmbedItem = new EmbedItem(newItem);
         const response = await interaction.reply({ content: `Do you want to create **${newItem.name}** and register it in your server? `, components: [dialog.build()], embeds: [embed.build(EMBED_ITEM_FLAGS.Create)] });
         await dialog.handle(response, async (_) => {
-            await itemRepo.addItem(newItem);
+            await itemRepo.createItem(newItem);
             await response.edit({ content: `✅ **${newItem.name}** was succesfully created.`,  components: [] });
             (await response.fetch()).react('👅');
         }, async (confirmation) => {
-            await confirmation.deferUpdate();
-            await confirmation.deleteReply();
+            await response.delete();
         });
 
     }, true);

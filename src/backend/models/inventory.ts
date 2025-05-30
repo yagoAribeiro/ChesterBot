@@ -7,11 +7,13 @@ export class Inventory implements DataModel<Inventory>{
     userID?: string;
     type: number;
     guildID: string;
+    currency?: number
 
-    constructor(guildID: string, type: number, userID?: string, ID?: number){
+    constructor(guildID: string, type: number, userID?: string, currency?: number, ID?: number){
         this.ID = ID;
         this.userID = userID;
         this.type = type;
+        this.currency = currency;
         this.guildID = guildID;
     }
     compareTo(b: Inventory): number {

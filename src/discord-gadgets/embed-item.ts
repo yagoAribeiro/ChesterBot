@@ -34,9 +34,8 @@ export class EmbedItem{
         if (!this.item.description && this.item.effect) embed.setDescription(this.item.effect);
         else if (this.item.description) embed.setDescription(`*${this.item.description}*`);
         if (this.item.description && this.item.effect) embed.addFields({name: '\u200B', value: this.item.effect})
-        embed.addFields({name: 'Value', value: this.item.value?.toString() ?? 'N/A', inline: true});
-        embed.addFields({name: 'Weight', value: this.item.weight?.toString() ?? 'N/A', inline: true});
-        embed.setFooter({text: `Item created on ${this.item.creationDate.toDateString()}`})
+        embed.addFields({name: 'Value (T$)', value: this.item.value?.toFixed(2) ?? 'N/A', inline: true});
+        embed.addFields({name: 'Weight (Slots)', value: this.item.weight?.toFixed(2) ?? 'N/A', inline: true});
         return embed;
     }
 }
