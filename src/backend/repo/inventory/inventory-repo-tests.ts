@@ -86,30 +86,8 @@ export class InventoryRepoTests implements IinventoryRepo {
         return Promise.resolve(total);
     }
 
-    getInventoriesByDepth(guildID: number, depth: number): Promise<Map<number, Inventory>> {
-        throw new Error("Method not implemented.");
-    }
     getItemCount(inventoryID: number): Promise<number> {
         return Promise.resolve(this.instances.filter(ins => ins.inventoryID == inventoryID).length);
-    }
-    clear(inventoryID: number): Promise<boolean> {
-        this.instances = this.instances.filter(ins => ins.inventoryID != inventoryID);
-        return Promise.resolve(true);
-    }
-    async describe(instanceID: number): Promise<ItemInstance> {
-        let instance: ItemInstance = await this.getInstance(instanceID);
-        this.loadItem(instance);
-        return Promise.resolve(instance);
-    }
-    moveItem(instanceID: number, index: number): Promise<boolean> {
-        this.instances.find(ins => ins.ID == instanceID).index = index;
-        return Promise.resolve(true);
-    }
-    divide(instanceID: number, divisor: number): Promise<boolean> {
-        throw new Error("Method not implemented.");
-    }
-    give(instanceID: number, amount: number, newInventoryID: number): Promise<boolean> {
-        throw new Error("Method not implemented.");
     }
 
     getInventory(inventoryID: number): Promise<Inventory> {
@@ -125,7 +103,4 @@ export class InventoryRepoTests implements IinventoryRepo {
         return Promise.resolve(this.instances.find(ins => ins.itemID == itemID && ins.inventoryID == inventoryID));
     }
 
-    async loadItem(instance: ItemInstance): Promise<void> {
-        instance.itemRef = await this.itemRepo.getItem(instance.itemID);
-    }
 }

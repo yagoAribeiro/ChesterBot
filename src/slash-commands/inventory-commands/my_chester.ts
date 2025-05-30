@@ -7,6 +7,7 @@ import { IinventoryRepo, INVENTORY_REPO_KEY } from "../../backend/repo/inventory
 import { Inventory } from "../../backend/models/inventory";
 import { ItemInstance } from "../../backend/models/item-instance";
 import { EmbedInstance } from "../../discord-gadgets/embed-instance";
+import { CommandException } from "../../backend/utils/command-exception";
 
 export = new CustomCommand(new SlashCommandBuilder()
     .setName('my_chester')
@@ -15,6 +16,7 @@ export = new CustomCommand(new SlashCommandBuilder()
         await interaction.deferReply();
         const repo = new InjectionContainer().get<IinventoryRepo>(INVENTORY_REPO_KEY);
         const inventory: Inventory = await repo.getInventoryByGuildUser(interaction.guild.id, interaction.user.id);
+        if ((await repo.getItemCount(inventory.ID)) <= 0 )throw new CommandException('🥀 Your Chester is empty :(', interaction);
         const maxDepth: number = await repo.getMaxDepth(inventory.ID);
         const dialog = new SliderDialog<ItemInstance>(interaction, maxDepth, async (models) => {
             const embed = new EmbedBuilder().setTitle(`${interaction.user.displayName}'s registered items.`)
