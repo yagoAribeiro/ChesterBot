@@ -4,7 +4,8 @@ import { ItemInstance } from "../../models/item-instance";
 
 export interface IinventoryRepo{
     add(itemID: number, inventoryID: number, amount: number) : Promise<Item>;
-    remove(instanceID: number, amount?: number) : Promise<Item>;
+    remove(instanceID: number, amount: number) : Promise<Item>;
+    give(inventoryID: number, instanceID: number, amount?: number) : Promise<boolean>;
     update(inventoryID: number, currency?: number, maxWeight?: number): Promise<Inventory>;
     createInventory(guildID: string, userID?: string, type?: number): Promise<Inventory>;
     getInventory(inventoryID: number): Promise<Inventory>;

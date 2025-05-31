@@ -60,6 +60,15 @@ export class InventoryRepoTests implements IinventoryRepo {
         return Promise.resolve(inventory);
     }
 
+    async give(inventoryID: number, instanceID: number, amount: number): Promise<boolean> {
+        let instance: ItemInstance = await this.getInstance(instanceID);
+        if (amount > instance.amount) amount = instance.amount;
+        else if (amount <= 0) amount = 1;
+        await this.add(instance.itemRef.ID, inventoryID, amount);
+        await this.remove(instance.ID, amount);
+        return Promise.resolve(true);
+    }
+
     async getMaxDepth(inventoryID: number): Promise<number> {
         return Math.ceil(await this.getItemCount(inventoryID) / 8.0);
     }
