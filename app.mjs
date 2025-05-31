@@ -13,15 +13,15 @@ import { setEntries } from './bin/backend/injection/container.js';
 import { InventoryRepoTests } from './bin/backend/repo/inventory/inventory-repo-tests.js';
 import { ItemAPI } from './bin/backend/api/item/item-api.js';
 import { ItemTestRepo } from './bin/backend/repo/item/item-repo-test.js';
-import { ItemRepo } from './bin/backend/repo/item/item-repo.js';
+import { GuildTestRepo } from './bin/backend/repo/guild/guild-repo-test.js';
 import { CommandException } from './bin/backend/utils/command-exception.js';
 import { InjectionContainer } from './bin/backend/injection/injector.js';
-import { DbManager } from './bin/backend/db/DbManager.js';
+import { DbManager } from './bin/backend/db/db-manager.js';
 
 const __dirname = resolve();
 const __dircommand = 'bin/slash-commands'
 //DI
-setEntries([AppConfig, ItemAPI, ItemRepo, ItemTestRepo, InventoryRepoTests, DbManager]);
+setEntries([AppConfig, ItemAPI, ItemTestRepo, InventoryRepoTests, DbManager, GuildTestRepo]);
 
 //Client setup base;
 const client = new Client({
@@ -56,12 +56,12 @@ client.on(Events.InteractionCreate, async interaction => {
 				await command.autocomplete(interaction);
 			}
 		} catch (err) {
-			if (err instanceof CommandException){
-				if (err.commandInteraction != null){
-					try{
-						if (err.commandInteraction.replied || err.commandInteraction.deferred) await err.commandInteraction.editReply({content: err.message, components: [], embeds: []});
-						else await err.commandInteraction.reply({content: err.message, components: [], embeds: []});
-					}catch(e){
+			if (err instanceof CommandException) {
+				if (err.commandInteraction != null) {
+					try {
+						if (err.commandInteraction.replied || err.commandInteraction.deferred) await err.commandInteraction.editReply({ content: err.message, components: [], embeds: [] });
+						else await err.commandInteraction.reply({ content: err.message, components: [], embeds: [] });
+					} catch (e) {
 						console.error(`Could not properly reply to a command exception: ${e}`);
 					}
 				}

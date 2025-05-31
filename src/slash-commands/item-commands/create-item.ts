@@ -6,6 +6,8 @@ import { IitemRepo, ITEM_REPO_KEY } from '../../backend/repo/item/i-item-repo';
 import { itemOptions, ITEM_OPTIONS } from '../../backend/utils/command-options/item-options';
 import { EMBED_ITEM_FLAGS, EmbedItem } from '../../discord-gadgets/embed-item';
 import { ConfirmationDialog } from '../../discord-gadgets/confirmation-dialog';
+import { GUILD_REPO_KEY, IGuildRepo } from '../../backend/repo/guild/i-guild-repo';
+import { GuildModel } from '../../backend/models/guild';
 export = new CustomCommand(new SlashCommandBuilder()
     .setName('create_item')
     .setDescription('Create a new item to current server.')
@@ -18,7 +20,10 @@ export = new CustomCommand(new SlashCommandBuilder()
     .addBooleanOption(itemOptions.getCommandOption(ITEM_OPTIONS.secret, () => new SlashCommandBooleanOption().setRequired(false))),
     async (interaction) => {
         const itemRepo = new InjectionContainer().get<IitemRepo>(ITEM_REPO_KEY);
-        let newItem: Item = new Item(interaction.guildId,
+        const guildRepo = new InjectionContainer().get<IGuildRepo>(GUILD_REPO_KEY);
+        await interaction.deferReply();
+        let guild: GuildModel = await guildRepo.getGuildByDiscordID(interaction.guild.id);
+        let newItem: Item = new Item(guild.ID,
             interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.name)),
             interaction.options.getBoolean(itemOptions.getName(ITEM_OPTIONS.secret)),
             new Date(),
@@ -29,10 +34,10 @@ export = new CustomCommand(new SlashCommandBuilder()
             interaction.options.getNumber(itemOptions.getName(ITEM_OPTIONS.value)));
         const dialog: ConfirmationDialog = new ConfirmationDialog((i: any) => i.user.id === interaction.user.id);
         const embed: EmbedItem = new EmbedItem(newItem);
-        const response = await interaction.reply({ content: `Do you want to create **${newItem.name}** and register it in your server? `, components: [dialog.build()], embeds: [embed.build(EMBED_ITEM_FLAGS.Create)] });
+        const response = await interaction.editReply({ content: `Do you want to create **${newItem.name}** and register it in your server? `, components: [dialog.build()], embeds: [embed.build(EMBED_ITEM_FLAGS.Create)] });
         await dialog.handle(response, async (_) => {
-            await itemRepo.createItem(newItem);
-            await response.edit({ content: `✅ **${newItem.name}** was succesfully created.`,  components: [] });
+            let item: Item = await itemRepo.createItem(newItem);
+            await response.edit({ content: `✅ **${item.name}** was succesfully created.`,  components: [] });
             (await response.fetch()).react('👅');
         }, async (confirmation) => {
             await response.delete();

@@ -1,4 +1,4 @@
-import { Inventory } from "../../models/inventory";
+import { Inventory, INVENTORY_TYPES } from "../../models/inventory";
 import { Item } from "../../models/item";
 import { ItemInstance } from "../../models/item-instance";
 
@@ -7,10 +7,10 @@ export interface IinventoryRepo{
     remove(instanceID: number, amount: number) : Promise<Item>;
     give(inventoryID: number, instanceID: number, amount?: number) : Promise<boolean>;
     update(inventoryID: number, currency?: number, maxWeight?: number): Promise<Inventory>;
-    createInventory(guildID: string, userID?: string, type?: number): Promise<Inventory>;
+    createInventory(discordGuildID: string, discordUserID: string, type: INVENTORY_TYPES): Promise<Inventory>;
     getInventory(inventoryID: number): Promise<Inventory>;
     getInstance(instanceID: number): Promise<ItemInstance | null>;    
-    getInventoryByGuildUser(guildID: string, userID: string): Promise<Inventory>;
+    getInventoryByGuildUser(discordGuildID: string, discordUserID: string): Promise<Inventory>;
     getInstances(inventoryID: number) : Promise<ItemInstance[]>;
     getInstancesAutocomplete(inventoryID: number, query: string) : Promise<ItemInstance[]>;
     getInstancesByDepth(inventoryID: number, depth: number) : Promise<Map<number, ItemInstance>>;

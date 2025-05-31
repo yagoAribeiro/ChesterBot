@@ -12,7 +12,7 @@ export class ItemNameAutocomplete implements IAutoCompleteHandler {
         const itemRepo: IitemRepo = new InjectionContainer().get<IitemRepo>(ITEM_REPO_KEY);
         let choices: Item[];
         if (focusedOption.name == itemOptions.getName(ITEM_OPTIONS.name)) {
-            choices = await itemRepo.getItemsFromAutocomplete(interaction.guildId, focusedOption.value);
+            choices = await itemRepo.getItemsFromAutocomplete(interaction.guild.id, focusedOption.value);
         }
         await interaction.respond(choices.map<ApplicationCommandOptionChoiceData>((item) => {
             return { name: item.name, value: item.ID.toString() };

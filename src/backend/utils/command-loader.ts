@@ -35,7 +35,8 @@ export class SlashCommandLoader{
             }
         const config: AppConfig = new InjectionContainer().get<AppConfig>(AppConfig.name);
         await rest.put(Routes.applicationCommands(config.clientID), {body: []}); //Temporary, just allow commands to be devOnly and clear globalCommands.
-        const promise = rest.put(Routes.applicationGuildCommands(config.clientID, config.guildDevID), {body: devCommands});
+        let promise = rest.put(Routes.applicationGuildCommands(config.clientID, config.guildDevID), {body: devCommands});
+        promise = rest.put(Routes.applicationGuildCommands(config.clientID, config.guildDevID2), {body: devCommands});
         promise.then(_ => console.log('Discord API received our command request successfully (200)'), reason => console.log(`Discord API rejected our command request. Reason: ${reason}`));
         await promise;
         return clientCommands;

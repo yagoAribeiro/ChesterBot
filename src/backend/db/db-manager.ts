@@ -6,8 +6,8 @@ import {Pool, RowDataPacket, createPool} from "mysql2/promise";
 
 @injectable([ENV.Tests, ENV.Live], SCOPE.Singleton, DbManager.name)
 export class DbManager{
-    config: AppConfig;
-    pool: Pool;
+    private config: AppConfig;
+    private pool: Pool;
     constructor(config: AppConfig){
         this.config = config;
     }
