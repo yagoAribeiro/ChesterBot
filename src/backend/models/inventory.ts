@@ -1,5 +1,6 @@
 import { StringSelectMenuOptionBuilder } from "discord.js";
 import { DataModel } from "./i-data-model";
+import { RowDataPacket } from "mysql2";
 
 
 export class Inventory implements DataModel<Inventory>{
@@ -18,14 +19,10 @@ export class Inventory implements DataModel<Inventory>{
         this.maxWeight = maxWeight;
         this.guildID = guildID;
     }
+    static fromDbRow(row: RowDataPacket): Inventory {
+        throw new Error("Method not implemented.");
+    }
     compareTo(b: Inventory): number {
-        throw new Error("Method not implemented.");
-    }
-
-    toMap(): Map<string, any> {
-        throw new Error("Method not implemented.");
-    }
-    fromMap(map: Map<string, any>): Inventory {
         throw new Error("Method not implemented.");
     }
     toSelectOption(index?: number): Promise<StringSelectMenuOptionBuilder> {

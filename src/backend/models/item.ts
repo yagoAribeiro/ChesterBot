@@ -1,5 +1,6 @@
 import { StringSelectMenuOptionBuilder } from "discord.js";
 import { DataModel } from "./i-data-model";
+import { RowDataPacket } from "mysql2";
 
 export class Item implements DataModel<Item>{
     ID?: number;
@@ -25,18 +26,14 @@ export class Item implements DataModel<Item>{
         this.effect = effect;
         this.ID = ID;
     }
+    static fromDbRow(row: RowDataPacket): Item {
+        throw new Error("Method not implemented.");
+    }
     compareTo(b: Item): number {
         return this.name > b.name ? 1 : this.name < b.name ? -1 : 0;
     }
     toSelectOption(index?: number): Promise<StringSelectMenuOptionBuilder> {
         return Promise.resolve(new StringSelectMenuOptionBuilder().setLabel(`${(index == null ? '' : index.toString()+'. ')}${this.name}`).setValue(this.ID.toString()));
-    }
-
-    toMap(): Map<string, any> {
-        throw new Error("Method not implemented.");
-    }
-    fromMap(map: Map<string, any>): Item {
-        throw new Error("Method not implemented.");
     }
    
 }

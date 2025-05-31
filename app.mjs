@@ -16,11 +16,12 @@ import { ItemTestRepo } from './bin/backend/repo/item/item-repo-test.js';
 import { ItemRepo } from './bin/backend/repo/item/item-repo.js';
 import { CommandException } from './bin/backend/utils/command-exception.js';
 import { InjectionContainer } from './bin/backend/injection/injector.js';
+import { DbManager } from './bin/backend/db/DbManager.js';
 
 const __dirname = resolve();
 const __dircommand = 'bin/slash-commands'
 //DI
-setEntries([AppConfig, ItemAPI, ItemRepo, ItemTestRepo, InventoryRepoTests]);
+setEntries([AppConfig, ItemAPI, ItemRepo, ItemTestRepo, InventoryRepoTests, DbManager]);
 
 //Client setup base;
 const client = new Client({
@@ -36,6 +37,9 @@ client.once(Events.ClientReady, readyClient => {
 const config = new InjectionContainer().get(AppConfig.name);
 const rest = new REST().setToken(config.token);
 
+//Config database;
+const dbManager = new InjectionContainer().get(DbManager.name);
+dbManager.getConnectionPool();
 
 //Command registering base;
 const commandLoader = new SlashCommandLoader(join(__dirname, __dircommand));
