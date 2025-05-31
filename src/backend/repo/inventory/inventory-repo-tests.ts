@@ -65,7 +65,11 @@ export class InventoryRepoTests implements IinventoryRepo {
     }
 
     async getInstances(inventoryID: number): Promise<ItemInstance[]> {
-        return Promise.resolve<ItemInstance[]>(this.instances.filter(instance => instance.inventoryID == inventoryID));
+        let instances: ItemInstance[] = this.instances.filter(instance => instance.inventoryID == inventoryID);
+        instances.forEach(async element => {
+            element.itemRef = await this.itemRepo.getItem(element.itemID);
+        });
+        return Promise.resolve<ItemInstance[]>(instances);
     }
 
     async remove(instanceID: number, amount?: number): Promise<Item> {
@@ -75,7 +79,9 @@ export class InventoryRepoTests implements IinventoryRepo {
         else instance.amount -= amount;
         return Promise.resolve(instance.itemRef);
     }
-    getInstance(instanceID: number): Promise<ItemInstance | null> {
+    async getInstance(instanceID: number): Promise<ItemInstance | null> {
+        let instance: ItemInstance = this.instances.find(ins => ins.ID == instanceID);
+        instance.itemRef = await this.itemRepo.getItem(instance.itemID);
         return Promise.resolve(this.instances.find(ins => ins.ID == instanceID));
     }
     getTotalWeight(inventoryID: number): Promise<number> {
