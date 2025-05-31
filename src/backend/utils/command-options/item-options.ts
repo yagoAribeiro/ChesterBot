@@ -2,6 +2,7 @@ import { OptionBaseData, CommandOptionsContainer} from "./base-command-options"
 
 export enum ITEM_OPTIONS{
     name,
+    new_name,
     resume,
     description,
     weight,
@@ -20,4 +21,5 @@ export const itemOptions: CommandOptionsContainer<ITEM_OPTIONS> = new CommandOpt
     [ITEM_OPTIONS.value, new OptionBaseData(ITEM_OPTIONS[ITEM_OPTIONS.value], 'Item\'s value. Any real number according to your RPG currency.')],
     [ITEM_OPTIONS.quantity, new OptionBaseData(ITEM_OPTIONS[ITEM_OPTIONS.quantity], 'Item\'s quantity to change.')],
     [ITEM_OPTIONS.secret, new OptionBaseData(ITEM_OPTIONS[ITEM_OPTIONS.secret], 'Set this item as secret. Secret items won\'t show for those who don\'t have it')],
+    [ITEM_OPTIONS.new_name, new OptionBaseData(ITEM_OPTIONS[ITEM_OPTIONS.new_name], 'Item\'s new name', 128, 2)]
 ]));

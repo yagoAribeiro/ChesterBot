@@ -22,7 +22,7 @@ export class SliderDialog<TModel extends DataModel> {
         let response: InteractionResponse<boolean> = null;
         let message: Message<boolean> = null;
         if (!this.commandInteraction.deferred) response = await this.commandInteraction.deferReply();
-        message = await this.commandInteraction.editReply({ embeds: [await this.buildEmbeds()], components: [this.buildMenuRow(), this.buildButtonRow()] });
+        message = await this.commandInteraction.editReply({ embeds: [await this.buildEmbeds()], components: [await this.buildMenuRow(), this.buildButtonRow()] });
         const buttonCollector = message.createMessageComponentCollector({ componentType: ComponentType.Button, time: 120_000 });
         buttonCollector.on('collect', async i => {
             let r = await i.deferUpdate();
@@ -30,7 +30,7 @@ export class SliderDialog<TModel extends DataModel> {
                 this.page += i.customId == 'left' ? -1 : 1;
                 this.page = this.page >= 1 && this.page <= this.maxPage ? this.page : this.page < 1 ? this.maxPage : 1;
             }
-            await r.edit({ embeds: [await this.buildEmbeds()], components: [this.buildMenuRow(), this.buildButtonRow()] });
+            await r.edit({ embeds: [await this.buildEmbeds()], components: [await this.buildMenuRow(), this.buildButtonRow()] });
         });
         buttonCollector.on('end', _ => {
             console.log(`"${this.commandInteraction.channelId}" button interaction collector ended succesfully.`);
@@ -72,9 +72,11 @@ export class SliderDialog<TModel extends DataModel> {
         return new ActionRowBuilder<ButtonBuilder>().addComponents([btnLeft, btnRight]);
     }
 
-    private buildMenuRow(): ActionRowBuilder<StringSelectMenuBuilder> {
+    private async buildMenuRow(): Promise<ActionRowBuilder<StringSelectMenuBuilder>> {
         const modelsAsOptions: StringSelectMenuOptionBuilder[] = [];
-        this.models.forEach((value, key) => modelsAsOptions.push(value.toSelectOption(key+1)));
+        for (let model of this.models){
+            modelsAsOptions.push(await model[1].toSelectOption(model[0]+1));
+        }
         const menu = new StringSelectMenuBuilder()
             .setCustomId('selector')
             .setPlaceholder('Select an item to describe')

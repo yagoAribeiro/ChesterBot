@@ -25,8 +25,11 @@ export class Item implements DataModel<Item>{
         this.effect = effect;
         this.ID = ID;
     }
-    toSelectOption(index?: number): StringSelectMenuOptionBuilder {
-        return new StringSelectMenuOptionBuilder().setLabel(`${(index == null ? '' : index.toString()+'. ')}${this.name}`).setValue(this.ID.toString());
+    compareTo(b: Item): number {
+        return this.name > b.name ? 1 : this.name < b.name ? -1 : 0;
+    }
+    toSelectOption(index?: number): Promise<StringSelectMenuOptionBuilder> {
+        return Promise.resolve(new StringSelectMenuOptionBuilder().setLabel(`${(index == null ? '' : index.toString()+'. ')}${this.name}`).setValue(this.ID.toString()));
     }
 
     toMap(): Map<string, any> {
