@@ -21,7 +21,7 @@ export const enum SCOPE {
  * The current environment to use when running.
  * @todo Transfer this to 'config.json'.
  */
-export const CURRENT: ENV = ENV.Tests;
+export const CURRENT: ENV = ENV.Live;
 
 /**
  * All the singletons of application, declared at runtime.

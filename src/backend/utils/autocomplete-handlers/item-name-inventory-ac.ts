@@ -14,7 +14,7 @@ export class ItemNameInventoryAutocomplete implements IAutoCompleteHandler {
         const inventory: Inventory = await inventoryRepo.getInventoryByGuildUser(interaction.guild.id, interaction.user.id);
         let choices: ItemInstance[];
         if (focusedOption.name == itemOptions.getName(ITEM_OPTIONS.name)) {
-            choices = await inventoryRepo.getInstances(inventory.ID);
+            choices = await inventoryRepo.getInstancesAutocomplete(inventory.ID, focusedOption.value);
         }
         await interaction.respond(choices.map<ApplicationCommandOptionChoiceData>((instance) => {
             return { name: `${instance.itemRef.name} (x${instance.amount})`, value: instance.ID.toString() };

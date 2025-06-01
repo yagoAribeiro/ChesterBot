@@ -18,6 +18,7 @@ export interface IinventoryRepo{
     getItemCount(inventoryID: number): Promise<number>;
     getTotalWeight(inventoryID: number): Promise<number>;
     getTotalItemValue(inventoryID: number): Promise<number>;
+    findInstanceByItemID(itemID: number, inventoryID: number): Promise<ItemInstance>;
 }
 
 export const INVENTORY_REPO_KEY: string = 'IinventoryRepo';

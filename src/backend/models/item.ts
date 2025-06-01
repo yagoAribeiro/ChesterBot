@@ -3,20 +3,20 @@ import { DataModel } from "./i-data-model";
 import { RowDataPacket } from "mysql2";
 import { GuildModel } from "./guild";
 
-export enum ITEM_FIELDS{
-    id,
-    guildID,
-    itemName,
-    itemResume,
-    itemDescription,
-    effect,
-    weight,
-    itemValue,
-    secret,
-    creationDate
+export enum ITEM_FIELDS {
+    ID,
+    GuildID,
+    ItemName,
+    ItemResume,
+    ItemDescription,
+    Effect,
+    Weight,
+    ItemValue,
+    Secret,
+    CreationDate
 }
 
-export class Item implements DataModel<Item, ITEM_FIELDS>{
+export class Item implements DataModel<Item, ITEM_FIELDS> {
     ID?: number;
     guildID: number;
     name: string;
@@ -29,7 +29,7 @@ export class Item implements DataModel<Item, ITEM_FIELDS>{
     creationDate: Date;
     guildRef?: GuildModel;
 
-    constructor(guildID: number, name: string, secret?: boolean, creationDate?: Date,description?: string, resume?: string, effect?: string, weight?: number, value?: number, guildRef?: GuildModel, ID?: number){
+    constructor(guildID: number, name: string, secret?: boolean, creationDate?: Date, description?: string, resume?: string, effect?: string, weight?: number, value?: number, guildRef?: GuildModel, ID?: number) {
         this.guildID = guildID;
         this.name = name;
         this.resume = resume;
@@ -42,28 +42,33 @@ export class Item implements DataModel<Item, ITEM_FIELDS>{
         this.guildRef = guildRef;
         this.ID = ID;
     }
+
     getByEnum(index: ITEM_FIELDS) {
-        switch(index){
-            case ITEM_FIELDS.id: return this.ID;
-            case ITEM_FIELDS.guildID: return this.guildID;
-            case ITEM_FIELDS.itemName: return this.name;
-            case ITEM_FIELDS.itemResume: return this.resume;
-            case ITEM_FIELDS.itemDescription: return this.description;
-            case ITEM_FIELDS.effect: return this.effect;
-            case ITEM_FIELDS.weight: return this.weight;
-            case ITEM_FIELDS.itemValue: return this.value;
-            case ITEM_FIELDS.secret: return this.secret;
-            case ITEM_FIELDS.creationDate: return this.creationDate;
+        switch (index) {
+            case ITEM_FIELDS.ID: return this.ID;
+            case ITEM_FIELDS.GuildID: return this.guildID;
+            case ITEM_FIELDS.ItemName: return this.name;
+            case ITEM_FIELDS.ItemResume: return this.resume;
+            case ITEM_FIELDS.ItemDescription: return this.description;
+            case ITEM_FIELDS.Effect: return this.effect;
+            case ITEM_FIELDS.Weight: return this.weight;
+            case ITEM_FIELDS.ItemValue: return this.value;
+            case ITEM_FIELDS.Secret: return this.secret;
+            case ITEM_FIELDS.CreationDate: return this.creationDate;
         }
     }
-    static fromDbRow(row: RowDataPacket): Item {
-        throw new Error("Method not implemented.");
+    static getTableName(): string {
+        return "item";
+    }
+
+    static getColumnName(index: ITEM_FIELDS): string {
+        return ITEM_FIELDS[index];
     }
     compareTo(b: Item): number {
         return this.name > b.name ? 1 : this.name < b.name ? -1 : 0;
     }
     toSelectOption(index?: number): Promise<StringSelectMenuOptionBuilder> {
-        return Promise.resolve(new StringSelectMenuOptionBuilder().setLabel(`${(index == null ? '' : index.toString()+'. ')}${this.name}`).setValue(this.ID.toString()));
+        return Promise.resolve(new StringSelectMenuOptionBuilder().setLabel(`${(index == null ? '' : index.toString() + '. ')}${this.name}`).setValue(this.ID.toString()));
     }
-   
+
 }

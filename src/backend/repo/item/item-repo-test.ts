@@ -1,4 +1,3 @@
-import { ItemAPI } from "../../api/item/item-api";
 import { DbManager } from "../../db/db-manager";
 import { ENV, SCOPE } from "../../injection/container";
 import { injectable, InjectionContainer } from "../../injection/injector";
