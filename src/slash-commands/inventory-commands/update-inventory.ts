@@ -28,6 +28,6 @@ export = new CustomCommand(new SlashCommandBuilder()
         } catch (err) {
             throw new CommandException(err.message, interaction);
         }
-    }, true, new ItemNameAutocomplete().handle);
+    }, true);
 
 

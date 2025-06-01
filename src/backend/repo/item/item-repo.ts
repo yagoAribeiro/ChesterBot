@@ -125,7 +125,7 @@ export class ItemRepo extends BaseRepo implements IitemRepo {
         let guild: GuildModel = await this.guildRepo.getGuildByDiscordID(discordGuildID);
         let max_depth: number = await this.getMaxDepth(guild.ID);
         depth = depth > max_depth ? max_depth : depth < 1 ? 1 : depth;
-        const sql: string = `SELECT * FROM ${Item.getTableName()} WHERE ${Item.getColumnName(ITEM_FIELDS.GuildID)} = ? ORDER BY ${Item.getColumnName(ITEM_FIELDS.ItemName)} ${sorting && sorting < 0 ? 'ASC' : 'DESC'} LIMIT ? OFFSET ?;`;
+        const sql: string = `SELECT * FROM ${Item.getTableName()} WHERE ${Item.getColumnName(ITEM_FIELDS.GuildID)} = ? AND COALESCE(${Item.getColumnName(ITEM_FIELDS.Secret)}, 0) = 0 ORDER BY ${Item.getColumnName(ITEM_FIELDS.ItemName)} ${sorting && sorting < 0 ? 'ASC' : 'DESC'} LIMIT ? OFFSET ?;`;
         const values: Array<any> = [guild.ID, 8, Math.abs((depth - 1) * 8)];
         console.log(`[SQL] -> ${sql}\n[VALUES] -> ${values.toString()}`);
         let items: Map<number, Item> = new Map<number, Item>();
@@ -151,7 +151,7 @@ export class ItemRepo extends BaseRepo implements IitemRepo {
         });
         return items;
     }
-    async getItemsFromAutocomplete(discordGuildID: string, query: string): Promise<Item[]> {
+    async getItemsFromAutocomplete(discordGuildID: string, query: string, revealSecrets: boolean = false): Promise<Item[]> {
         if (query.length <= 2) return [];
         let guild: GuildModel = await this.guildRepo.getGuildByDiscordID(discordGuildID);
         const sql: string = `SELECT * FROM ${Item.getTableName()} WHERE ${Item.getColumnName(ITEM_FIELDS.GuildID)} = ? 
@@ -163,6 +163,7 @@ export class ItemRepo extends BaseRepo implements IitemRepo {
             if (result[0].length > 0) {
                 for (let i = 0; i < result[0].length; i++) {
                     let row: RowDataPacket = result[0][i];
+                    if (!revealSecrets && row[Item.getColumnName(ITEM_FIELDS.Secret)]) continue;
                     items.push(new Item(
                         row[Item.getColumnName(ITEM_FIELDS.GuildID)],
                         row[Item.getColumnName(ITEM_FIELDS.ItemName)],

@@ -8,6 +8,7 @@ import { ItemNameAutocomplete } from '../../backend/utils/autocomplete-handlers/
 import { Item } from '../../backend/models/item';
 import { CommandException } from '../../backend/utils/command-exception';
 import { INVENTORY_OPTIONS, inventoryOptions } from '../../backend/utils/command-options/inventory-options';
+import { ItemNameSecretsAutocomplete } from '../../backend/utils/autocomplete-handlers/item-name-secrets-ac';
 export = new CustomCommand(new SlashCommandBuilder()
     .setName('add_to')
     .setDescription('Add an item to another user\'s inventory.')
@@ -30,6 +31,6 @@ export = new CustomCommand(new SlashCommandBuilder()
         } catch (err) {
             throw new CommandException(err.message, interaction);
         }
-    }, true, new ItemNameAutocomplete().handle);
+    }, true, new ItemNameSecretsAutocomplete().handle);
 
 

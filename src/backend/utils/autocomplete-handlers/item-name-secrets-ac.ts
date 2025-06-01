@@ -6,13 +6,13 @@ import { ITEM_OPTIONS, itemOptions } from "../command-options/item-options";
 import { Item } from "../../models/item";
 
 
-export class ItemNameAutocomplete implements IAutoCompleteHandler {
+export class ItemNameSecretsAutocomplete implements IAutoCompleteHandler {
     async handle(interaction: AutocompleteInteraction): Promise<void> {
         const focusedOption: AutocompleteFocusedOption = interaction.options.getFocused(true);
         const itemRepo: IitemRepo = new InjectionContainer().get<IitemRepo>(ITEM_REPO_KEY);
         let choices: Item[];
         if (focusedOption.name == itemOptions.getName(ITEM_OPTIONS.name)) {
-            choices = await itemRepo.getItemsFromAutocomplete(interaction.guild.id, focusedOption.value, false);
+            choices = await itemRepo.getItemsFromAutocomplete(interaction.guild.id, focusedOption.value, true);
         }
         await interaction.respond(choices.map<ApplicationCommandOptionChoiceData>((item) => {
             return { name: item.name, value: item.ID.toString() };

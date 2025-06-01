@@ -8,7 +8,7 @@ export interface IitemRepo{
     updateItem(itemID: number, model: Item) : Promise<Item>
     deleteItem(itemID: number) : Promise<boolean>
     getItemsByDepth(discordGuildID: string, depth: number, sorting?: number) : Promise<Map<number, Item>>
-    getItemsFromAutocomplete(discordGuildID: string, query: string): Promise<Item[]>
+    getItemsFromAutocomplete(discordGuildID: string, query: string, revealSecrets: boolean): Promise<Item[]>
     getMaxDepth(guildID:number): Promise<number> 
 }
 
