@@ -11,10 +11,10 @@ export class ItemNameInventoryAutocomplete implements IAutoCompleteHandler {
     async handle(interaction: AutocompleteInteraction): Promise<void> {
         const focusedOption: AutocompleteFocusedOption = interaction.options.getFocused(true);
         const inventoryRepo: IinventoryRepo = new InjectionContainer().get<IinventoryRepo>(INVENTORY_REPO_KEY);
-        const inventory: Inventory = await inventoryRepo.getInventoryByGuildUser(interaction.guildId, interaction.user.id);
+        const inventory: Inventory = await inventoryRepo.getInventoryByGuildUser(interaction.guild.id, interaction.user.id);
         let choices: ItemInstance[];
         if (focusedOption.name == itemOptions.getName(ITEM_OPTIONS.name)) {
-            choices = await inventoryRepo.getInstances(inventory.ID);
+            choices = await inventoryRepo.getInstancesAutocomplete(inventory.ID, focusedOption.value);
         }
         await interaction.respond(choices.map<ApplicationCommandOptionChoiceData>((instance) => {
             return { name: `${instance.itemRef.name} (x${instance.amount})`, value: instance.ID.toString() };

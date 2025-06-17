@@ -10,17 +10,23 @@ import { SlashCommandLoader } from './bin/backend/utils/command-loader.js';
 import { resolve, join } from 'node:path';
 import { AppConfig } from './bin/backend/utils/app-config.js';
 import { setEntries } from './bin/backend/injection/container.js';
-import { InventoryRepoTests } from './bin/backend/repo/inventory/inventory-repo-tests.js';
 import { ItemAPI } from './bin/backend/api/item/item-api.js';
+
 import { ItemTestRepo } from './bin/backend/repo/item/item-repo-test.js';
+import { InventoryRepoTests } from './bin/backend/repo/inventory/inventory-repo-tests.js';
+import { GuildTestRepo } from './bin/backend/repo/guild/guild-repo-test.js';
 import { ItemRepo } from './bin/backend/repo/item/item-repo.js';
+import { InventoryRepo } from './bin/backend/repo/inventory/inventory-repo.js';
+import { GuildRepo } from './bin/backend/repo/guild/guild-repo.js';
+
 import { CommandException } from './bin/backend/utils/command-exception.js';
 import { InjectionContainer } from './bin/backend/injection/injector.js';
+import { DbManager } from './bin/backend/db/db-manager.js';
 
 const __dirname = resolve();
 const __dircommand = 'bin/slash-commands'
 //DI
-setEntries([AppConfig, ItemAPI, ItemRepo, ItemTestRepo, InventoryRepoTests]);
+setEntries([AppConfig, ItemAPI, ItemTestRepo, InventoryRepoTests, DbManager, GuildTestRepo, ItemRepo, GuildRepo, InventoryRepo]);
 
 //Client setup base;
 const client = new Client({
@@ -36,10 +42,9 @@ client.once(Events.ClientReady, readyClient => {
 const config = new InjectionContainer().get(AppConfig.name);
 const rest = new REST().setToken(config.token);
 
-
 //Command registering base;
 const commandLoader = new SlashCommandLoader(join(__dirname, __dircommand));
-commandLoader.setup(rest).then((value) => client.commands = value);
+await commandLoader.setup(rest).then((value) => client.commands = value);
 
 //Command handling base;
 client.on(Events.InteractionCreate, async interaction => {
@@ -52,12 +57,12 @@ client.on(Events.InteractionCreate, async interaction => {
 				await command.autocomplete(interaction);
 			}
 		} catch (err) {
-			if (err instanceof CommandException){
-				if (err.commandInteraction != null){
-					try{
-						if (err.commandInteraction.replied || err.commandInteraction.deferred) await err.commandInteraction.editReply({content: err.message, components: [], embeds: []});
-						else await err.commandInteraction.reply({content: err.message, components: [], embeds: []});
-					}catch(e){
+			if (err instanceof CommandException) {
+				if (err.commandInteraction != null) {
+					try {
+						if (err.commandInteraction.replied || err.commandInteraction.deferred) await err.commandInteraction.editReply({ content: err.message, components: [], embeds: [] });
+						else await err.commandInteraction.reply({ content: err.message, components: [], embeds: [] });
+					} catch (e) {
 						console.error(`Could not properly reply to a command exception: ${e}`);
 					}
 				}

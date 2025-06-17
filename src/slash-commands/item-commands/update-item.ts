@@ -33,7 +33,7 @@ export = new CustomCommand(new SlashCommandBuilder()
             interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.resume)) ?? oldItem.resume,
             interaction.options.getString(itemOptions.getName(ITEM_OPTIONS.effect)) ?? oldItem.effect,
             interaction.options.getNumber(itemOptions.getName(ITEM_OPTIONS.weight)) ?? oldItem.weight,
-            interaction.options.getNumber(itemOptions.getName(ITEM_OPTIONS.value)) ?? oldItem.value, oldItem.ID);
+            interaction.options.getNumber(itemOptions.getName(ITEM_OPTIONS.value)) ?? oldItem.value, oldItem.guildRef, oldItem.ID);
 
         const dialog: ConfirmationDialog = new ConfirmationDialog((i: any) => i.user.id === interaction.user.id);
         const embedOld: EmbedItem = new EmbedItem(oldItem);

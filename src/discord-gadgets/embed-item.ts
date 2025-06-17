@@ -31,9 +31,8 @@ export class EmbedItem{
                 break;
         }
         const embed: EmbedBuilder = new EmbedBuilder().setTitle(`${prefix}${this.item.name}`).setColor(color);
-        if (!this.item.description && this.item.effect) embed.setDescription(this.item.effect);
-        else if (this.item.description) embed.setDescription(`*${this.item.description}*`);
-        if (this.item.description && this.item.effect) embed.addFields({name: '\u200B', value: this.item.effect})
+        embed.setDescription(this.item.effect ?? this.item.description);
+        if (this.item.effect) embed.addFields({name: '\u200B', value: `*${this.item.description}*`});
         embed.addFields({name: 'Value (T$)', value: this.item.value?.toFixed(2) ?? 'N/A', inline: true});
         embed.addFields({name: 'Weight (Slots)', value: this.item.weight?.toFixed(2) ?? 'N/A', inline: true});
         return embed;

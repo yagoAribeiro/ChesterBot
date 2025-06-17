@@ -1,9 +1,8 @@
 import { StringSelectMenuOptionBuilder } from "discord.js";
 
-export interface DataModel<TClass = any>{
+export interface DataModel<TClass = any, TEnum extends number = any>{
     ID?: number;
-    toMap(): Map<string, any>;
-    fromMap(map: Map<string, any>): TClass;
+    getByEnum(index: TEnum) : any;
     toSelectOption(index?: number): Promise<StringSelectMenuOptionBuilder>;
     compareTo(b: TClass): number;
 }

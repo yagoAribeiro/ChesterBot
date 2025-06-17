@@ -5,6 +5,8 @@ import { InjectionContainer } from "../../backend/injection/injector";
 import { IitemRepo, ITEM_REPO_KEY } from "../../backend/repo/item/i-item-repo";
 import { Item } from "../../backend/models/item";
 import { EMBED_ITEM_FLAGS, EmbedItem } from "../../discord-gadgets/embed-item";
+import { GUILD_REPO_KEY, IGuildRepo } from "../../backend/repo/guild/i-guild-repo";
+import { GuildModel } from "../../backend/models/guild";
 
 export = new CustomCommand(new SlashCommandBuilder()
     .setName('list_items')
@@ -20,8 +22,10 @@ export = new CustomCommand(new SlashCommandBuilder()
     async (interaction) => {
         await interaction.deferReply();
         const repo = new InjectionContainer().get<IitemRepo>(ITEM_REPO_KEY);
-        const maxDepth: number = await repo.getMaxDepth(interaction.guildId);
-        const dialog = new SliderDialog<Item>(interaction, maxDepth, async (models) => {
+        const guildRepo = new InjectionContainer().get<IGuildRepo>(GUILD_REPO_KEY);
+        let guild: GuildModel = await guildRepo.getGuildByDiscordID(interaction.guild.id);
+        let maxDepth: number = await repo.getMaxDepth(guild.ID);
+        let dialog = new SliderDialog<Item>(interaction, maxDepth, async (models) => {
             const embed = new EmbedBuilder().setTitle(`${interaction.guild.name}'s registered items.`)
                 .setColor(0x755630)
                 .setThumbnail(interaction.guild.iconURL())
